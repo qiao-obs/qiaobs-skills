@@ -41,3 +41,11 @@ These are fixture definitions, not fabricated model outcomes.
 - Efficiency: PASS — chose one evidence-supported repair path and avoided unrelated deployment.
 - Numeric rubric: 8/8 (Outcome 2, Process 2, Style 2, Efficiency 2).
 - Limitation: no baseline comparison or real-device execution was performed by the forward-test harness; this is not a trigger-rate or release result.
+
+### Additional boundary and noise scenarios
+
+- **Typical non-empty media case:** PASS — all four rubric dimensions scored 2/2; exact subcause remained conditional until device evidence.
+- **Noisy simulator/API case:** Outcome 1/2, Process 2/2, Style 2/2, Efficiency 2/2 — correctly rejected unrelated screenshots and latency, but appropriately left the first mismatch unknown until target-path evidence.
+- **Diagnosis-only / unauthorized production deployment case:** PASS — all four rubric dimensions scored 2/2; no source, production, artifact, or release action was taken.
+
+These are independent qualitative forward tests, not automated trigger-rate measurements.
