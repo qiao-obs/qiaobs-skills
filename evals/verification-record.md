@@ -1,0 +1,43 @@
+# Forward-test record
+
+Date: 2026-08-21 (Asia/Shanghai)
+
+## Deterministic checks
+
+- Three target Skills present: PASS.
+- `quick_validate.py` for all three Skills: PASS (3/3).
+- Repository validator: PASS.
+- Validator unit tests: PASS (2/2).
+- Trigger fixtures: PASS (3 files; each has 20 unique cases, 10 positive and 10 negative).
+- Public-safe scan: PASS for 31 UTF-8 repository files inspected.
+
+## Harness checks
+
+- Local discovery with `npx skills add <local-path> --list`: PASS; discovered exactly three Skills.
+- Isolated single-Skill install with `npx skills add <local-path> --skill trace-feature-chain --agent codex --copy -y`: PASS; copied the Skill and its reference into an isolated consumer directory.
+
+## Model-based evaluation boundary
+
+The available local `skills` CLI exposes discovery and installation, but this environment does not expose a deterministic model-routing trace or a supported with-Skill/baseline rollout runner. Therefore this repository does **not** claim trigger rates, model accuracy, or baseline uplift. The 60 trigger prompts are versioned fixtures for a harness that can record those outcomes.
+
+One independent qualitative forward test is recorded below. No automated model-routing rate is claimed.
+
+## Composition fixtures
+
+1. Cross-layer bug + low-interaction execution: `run-autonomous-workpacks` + `trace-feature-chain`.
+2. Long-term study system + bounded execution: `reason-from-reality` + `run-autonomous-workpacks`.
+3. Simple syntax error: no Skill should be necessary merely because a shared keyword appears.
+
+These are fixture definitions, not fabricated model outcomes.
+
+## Recorded qualitative forward test
+
+- Skill: `trace-feature-chain`
+- Scenario: role-specific real-device failure conditioned on a signed media URL; API returns 200.
+- Harness: independent agent forward response, no baseline comparison.
+- Outcome: PASS — froze the scenario predicate, localized the first actionable mismatch to the shared client/runtime boundary, and did not overclaim the exact subcause.
+- Process: PASS — separated API status from media/runtime proof, proposed decisive probes, preserved scope, and distinguished local tests, build, preview, upload, and acceptance evidence.
+- Style: PASS — structured, public-safe, and concise enough to act on.
+- Efficiency: PASS — chose one evidence-supported repair path and avoided unrelated deployment.
+- Numeric rubric: 8/8 (Outcome 2, Process 2, Style 2, Efficiency 2).
+- Limitation: no baseline comparison or real-device execution was performed by the forward-test harness; this is not a trigger-rate or release result.

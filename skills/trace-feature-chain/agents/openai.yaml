@@ -1,0 +1,3 @@
+interface:
+  display_name: "Trace Feature Chain"
+  short_description: "Find the first mismatch from scenario to release"

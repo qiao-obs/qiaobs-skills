@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="440" viewBox="0 0 1600 440" role="img" aria-labelledby="title desc">
+  <title id="title">qiaobs-skills</title>
+  <desc id="desc">A quiet blue-gray field with three linked nodes representing trace, execute, and learn.</desc>
+  <rect width="1600" height="440" fill="#eef3f8"/>
+  <rect x="56" y="56" width="1488" height="328" rx="28" fill="#f8fafc" stroke="#c7d3df" stroke-width="2"/>
+  <path d="M210 220H1390" stroke="#91a8bc" stroke-width="3" stroke-dasharray="10 16"/>
+  <g fill="#40566b">
+    <circle cx="390" cy="220" r="54"/><circle cx="800" cy="220" r="54"/><circle cx="1210" cy="220" r="54"/>
+  </g>
+  <g fill="#f8fafc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" text-anchor="middle">
+    <text x="390" y="214" font-size="22" font-weight="700">TRACE</text><text x="390" y="244" font-size="15">first mismatch</text>
+    <text x="800" y="214" font-size="22" font-weight="700">EXECUTE</text><text x="800" y="244" font-size="15">safe continuity</text>
+    <text x="1210" y="214" font-size="22" font-weight="700">LEARN</text><text x="1210" y="244" font-size="15">evidence loops</text>
+  </g>
+  <text x="112" y="132" fill="#243447" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="46" font-weight="700">qiaobs-skills</text>
+  <text x="114" y="318" fill="#526581" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22">reality-tested skills for agents that need to finish the chain</text>
+  <text x="1390" y="132" fill="#7a8fa3" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" text-anchor="end" letter-spacing="2">OPEN / COMPOSABLE / EVIDENCE-FIRST</text>
+</svg>

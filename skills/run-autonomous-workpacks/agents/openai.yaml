@@ -1,0 +1,3 @@
+interface:
+  display_name: "Run Autonomous Workpacks"
+  short_description: "Execute run-autonomous-workpacks with low interaction and verified results"

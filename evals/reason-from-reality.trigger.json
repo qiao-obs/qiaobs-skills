@@ -1,0 +1,25 @@
+{
+  "skill_name": "reason-from-reality",
+  "cases": [
+    {"id":"rfr-01","prompt":"Build a 12-week study system from my actual practice records. Separate facts, judgments, actions, validation, and unknowns.","should_trigger":true},
+    {"id":"rfr-02","prompt":"请根据真实做题记录诊断我为什么看懂但不能迁移，不要用名言或鼓励替代证据。","should_trigger":true},
+    {"id":"rfr-03","prompt":"Design a long-term learning loop with retrieval, spacing, interleaving, transfer practice, and re-tests tied to measurable outcomes.","should_trigger":true},
+    {"id":"rfr-04","prompt":"我有旧 AI 学习报告和最新练习记录，二者矛盾。请保留冲突，找最小证据并更新判断。","should_trigger":true},
+    {"id":"rfr-05","prompt":"Use reality-first reasoning to find the main bottleneck, opportunity cost, and next experiment in my preparation plan.","should_trigger":true},
+    {"id":"rfr-06","prompt":"请把‘知行合一’转成可观察行为、测量指标、复测日期和证伪条件。","should_trigger":true},
+    {"id":"rfr-07","prompt":"Assess whether my plan is overloaded by cognitive load and planning fallacy, using my actual schedule and recovery data.","should_trigger":true},
+    {"id":"rfr-08","prompt":"A learner asks for certainty about future rank without enough data. Respond with explicit unknowns and a minimal evidence-collection plan.","should_trigger":true},
+    {"id":"rfr-09","prompt":"Combine a civilization-wide wisdom core with modern learning science, but test every principle against practice and boundaries.","should_trigger":true},
+    {"id":"rfr-10","prompt":"Create a study review that distinguishes exposure, retrieval, transfer, and stable retention, then schedules the next measurement.","should_trigger":true},
+    {"id":"rfr-11","prompt":"What is the capital of France?","should_trigger":false},
+    {"id":"rfr-12","prompt":"Rewrite my paragraph in a warmer tone.","should_trigger":false},
+    {"id":"rfr-13","prompt":"Give me a dictionary definition of spaced repetition.","should_trigger":false},
+    {"id":"rfr-14","prompt":"Solve this algebra equation.","should_trigger":false},
+    {"id":"rfr-15","prompt":"List five famous philosophers.","should_trigger":false},
+    {"id":"rfr-16","prompt":"Make this to-do list shorter.","should_trigger":false},
+    {"id":"rfr-17","prompt":"Tell me a joke about exams.","should_trigger":false},
+    {"id":"rfr-18","prompt":"Translate this study note into English.","should_trigger":false},
+    {"id":"rfr-19","prompt":"What is the syntax for a Python loop?","should_trigger":false},
+    {"id":"rfr-20","prompt":"Suggest a title for my essay.","should_trigger":false}
+  ]
+}
