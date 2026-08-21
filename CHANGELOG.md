@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.2] - 2026-08-21
+
+### Added
+
+- Recorded qualitative forward-test evidence for `reason-from-reality`, including learning, noisy-evidence, and professional-boundary scenarios.
+
 ## [0.1.1] - 2026-08-21
 
 ### Fixed
