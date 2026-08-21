@@ -219,4 +219,4 @@ Read [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md), and [`C
 
 ## Version
 
-The current stable release is [`v0.1.2`](https://github.com/qiao-obs/qiaobs-skills/releases/tag/v0.1.2). The v0.2 refinement will update this line after verification and release.
+The current stable release is [`v0.2.0`](https://github.com/qiao-obs/qiaobs-skills/releases/tag/v0.2.0).
