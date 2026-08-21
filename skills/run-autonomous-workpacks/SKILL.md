@@ -1,142 +1,132 @@
 ---
 name: run-autonomous-workpacks
-description: Use for authorized multi-step work that should continue with few user decisions while remaining visibly trackable. Organize bounded workpacks, send concise non-blocking progress at kickoff, phase transitions, and bounded heartbeats, verify outcomes with evidence, and pause only for real blockers or new authorization. Do not use for analysis-only, diagnosis-only, or trivial one-step requests.
+description: Use for authorized multi-step tasks that should be organized and completed as bounded, verifiable workpacks with fewer manual handoffs. Preserve scope, user changes, safety boundaries, dependencies, and evidence. Do not use for analysis-only, diagnosis-only, or trivial one-step requests.
 ---
 
 # Autonomous Workpacks
 
-Complete authorized multi-stage work as bounded, inspectable workpacks. The method is **Observable Autonomy Protocol**: reduce forced user input without reducing the user's awareness of state, evidence, risk, or boundaries.
+Organize an authorized multi-stage task into bounded workpacks that can be executed, checked, recovered, and closed without losing the original scope.
 
-## Observable autonomy contract
-
-- **Minimize mandatory user input, not user awareness. A progress checkpoint is informational: send it and continue. Wait only at a real gate.**
-- Low interaction means fewer confirmations, handoffs, and routine implementation questions; it does not mean silence.
-- High autonomy means continuous execution inside the authorized scope; it does not expand authorization.
-- Progress reports are not approvals. Use `CHECKPOINT` for non-blocking information and `GATE` for a real wait.
-- Default to `observable` mode. Use `quiet` only when the user explicitly asks for silent execution. Use `high-visibility` only when explicitly requested.
-- Do not stream commands, expose internal reasoning, manufacture percentages, or ask “should I continue?” after a routine checkpoint.
-
-Read [communication-and-progress-contract.md](references/communication-and-progress-contract.md) for mode rules, timing, templates, status queries, long commands, and optional subagent visibility.
+> This skill governs work decomposition, execution boundaries, and verification. It does not prescribe message cadence, progress-report formats, commentary behavior, or subagent presentation; use Codex's native interaction behavior and follow any explicit instruction in the current user request.
 
 ## Mission contract
 
 Before the first mutation, extract and preserve:
 
-- objective and observable done condition;
-- allowed files, systems, artifacts, and external actions;
+- the objective and observable done condition;
+- the allowed files, systems, artifacts, and external actions;
 - non-goals and forbidden side effects;
-- authoritative inputs, assumptions, and required facts;
-- verification gates and final report shape;
+- authoritative inputs, assumptions, and facts that must be confirmed;
+- verification requirements and evidence needed for closeout;
 - stop conditions: `USER_ONLY`, `EXTERNAL_WAIT`, `UNAUTHORIZED_HIGH_IMPACT`, `MISSING_FACT`, or `FAILURE_UNRESOLVED`.
 
-Send a short kickoff `CHECKPOINT` before the first substantive tool call or subagent. It is informational and must not wait for a reply.
+If the request is analysis-only or diagnosis-only, keep every mutation workpack out of scope. If a required fact is missing, gather safe evidence before choosing an implementation.
 
-## Workpack lifecycle
+## Workpack cards
 
-Use the lifecycle in [workpack-lifecycle.md](references/workpack-lifecycle.md):
+Give each workpack one independently verifiable objective and a disjoint write scope where possible. Record:
+
+- ID and imperative name;
+- objective and done condition;
+- inputs and dependencies;
+- exact allowed writes and explicitly untouched paths;
+- risk and side-effect budget;
+- checks and evidence source;
+- recovery route for a failed check;
+- status: `queued`, `active`, `blocked`, `verified`, `failed`, or `skipped`.
+
+A documentation workpack must not silently edit product code. An installation or packaging check must use an isolated temporary location. Do not use a workpack card to smuggle in deployment, payment, publication, deletion, or unrelated cleanup.
+
+## Dependency waves
+
+Use this order unless the task facts justify a safer route:
 
 ```text
-Task contract → verifiable workpacks → dependency order
-→ execute and checkpoint → diagnose/retry local failure
-→ validate the whole result → COMPLETE / PARTIAL / BLOCKED
+Task contract → workpack cards → dependency order
+→ execute safe work → diagnose and retry local failures
+→ verify the whole result → COMPLETE / PARTIAL / BLOCKED
 ```
 
-Each workpack needs one objective, non-overlapping write scope, inputs, dependencies, done condition, checks, risk, recovery note, and status. Use `queued`, `active`, `blocked`, `verified`, `failed`, or `skipped` precisely.
-
-Report `CHECKPOINT` when baseline discovery is frozen, when implementation begins, when a workpack or wave completes, when verification begins, when a key assumption changes, or when local gates finish before external actions. Include completed, active, unverified, blocked, release status, and next step. Do not report every file or command.
-
-## Execute in dependency waves
-
-1. **Discover:** read instructions, audit the baseline, and name the scope boundary.
-2. **Prepare:** create the branch and controlled temporary locations; do not change behavior early.
+1. **Discover:** read repository instructions, inspect the baseline, and freeze the scope boundary.
+2. **Prepare:** create only the required branch, temporary locations, fixtures, or test inputs.
 3. **Implement:** make the smallest coherent change inside the allowed write scope.
-4. **Verify:** run narrow checks, then repository-wide checks and original-condition tests.
-5. **Close:** inspect the diff, perform only explicitly authorized external actions after local gates, and report the actual result.
+4. **Verify:** run focused checks, repository checks, and the original-condition test where available.
+5. **Close:** inspect the diff and perform only explicitly authorized external actions after local evidence is sufficient.
 
-Parallelize only independent checks with disjoint writes or read-only scopes. Subagents are optional optimization, not part of the Skill's definition. Use them only when the work is independent, coordination is worthwhile, and the main thread can summarize and verify the batch. Default to no more than three at once; read [communication-and-progress-contract.md](references/communication-and-progress-contract.md) before using them.
+Independent read-only checks or workpacks with disjoint writes may run concurrently when that reduces risk and does not weaken final verification. Delegation is optional; every delegated result still needs a clear done condition and main-thread verification.
 
 ## Authorization and stopping
 
-Continue safe, reversible, in-scope work without another confirmation. Establish a `GATE` and wait only for:
+Continue safe, reversible, in-scope work without another confirmation. Stop or mark the relevant workpack when the next action requires:
 
 - login, MFA, private credentials, or a security access path the user must provide;
-- external permission denial or formal approval;
-- an unapproved irreversible, production, public, paid, destructive, or high-impact action;
+- permission from an external service or formal human approval;
+- an unapproved irreversible, production, public, paid, destructive, or otherwise high-impact action;
 - a material ambiguity with no safe default;
 - a key fact whose absence makes the next mutation unsafe;
 - a critical result that cannot be verified and has no trustworthy substitute;
 - a legal, compliance, or safety decision that requires a human.
 
-Before a `GATE`, finish all independent safe work and state the smallest user action without requesting a secret. A `CHECKPOINT` never asks for confirmation; a `GATE` explicitly waits.
+Authorization is not transitive. Permission to edit a repository does not authorize production deployment, public publication, account changes, paid actions, or data deletion. A successful login proves access, not approval for every action. Never request or paste a secret into a task record.
 
-Use [decision-and-authorization-boundaries.md](references/decision-and-authorization-boundaries.md) for the blocker format.
+Use [decision-and-authorization-boundaries.md](references/decision-and-authorization-boundaries.md) for the decision table and factual blocker record.
 
 ## Failure, retries, and evidence
 
-Do not stop or repeat blindly when a routine check fails:
+When a routine check fails:
 
-1. preserve the command, exit code, and relevant error;
-2. classify content, environment, dependency, permission, or external-state failure;
-3. make one bounded correction;
+1. preserve the command, exit code, and first relevant error;
+2. classify the failure as content, environment, dependency, permission, or external state;
+3. change one diagnosed cause or input;
 4. rerun the smallest decisive check;
-5. continue only when the workpack's done condition is supported.
+5. continue only when the workpack done condition is supported.
 
-For long commands, announce the target and success criterion before starting. If there is no natural milestone after roughly 90 seconds, send a concise heartbeat; do not let a normal task go about two minutes without human-readable status. These timing values are this repository's collaboration design, not a platform guarantee.
+Do not repeat the same failing command without a changed diagnosis. A network timeout may receive one safe retry when the request is idempotent; authentication and permission failures are not retry invitations.
 
-A changed file is not a test; a passing test is not CI; CI is not a build, preview, upload, release, or user acceptance. Use [verification-and-failure-handling.md](references/verification-and-failure-handling.md) and mark missing proof `unknown`.
+A changed file is not a test. A passing test is not CI. CI is not a build, preview, upload, release, or user acceptance. Use [verification-and-failure-handling.md](references/verification-and-failure-handling.md) and record missing proof as `unknown`.
 
-## Required final state
+## Required closeout state
 
-Use one of:
+Use one of these states for the whole mission:
 
 - `COMPLETE`: every acceptance criterion has fresh, direct evidence;
-- `PARTIAL`: useful work is verified, but a bounded nonessential or externally unobservable criterion remains open;
-- `BLOCKED`: the next required safe action needs user input or an external state change.
+- `PARTIAL`: useful work is verified, but a known, bounded, nonessential, or externally unobservable criterion remains open;
+- `BLOCKED`: a required safe action cannot proceed without user input or an external state change.
 
-The final report must distinguish local edits, tests, CI, build, preview, upload, merge, release, and user acceptance. Include changed artifacts, intentionally untouched scope, skipped checks, assumptions, risks, blockers, and the one user action if any. Use [workpack-templates.md](references/workpack-templates.md) when a structured report helps.
-
-## Chinese operating example
-
-> 请低交互、高自治地完成这项多阶段改动。
->
-> **CHECKPOINT（不等待回复）：** 已完成范围确认和基线审计；正在进入实现；静态验证和安装冒烟尚未运行；当前未提交、未推送。下一次在实施完成或进入验证时汇报。我会继续执行。
->
-> 随后直接完成安全工作。只有登录/MFA、权限拒绝、未授权高影响动作或关键事实缺失才建立 `GATE`。
+The closeout record must distinguish local edits, tests, CI, build, preview, upload, merge, release, and user acceptance. Include changed artifacts, intentionally untouched scope, skipped checks, assumptions, risks, unresolved failures, and any required user input. Use [workpack-templates.md](references/workpack-templates.md) when a structured record helps.
 
 ## Red flags
 
-Stop and re-evaluate if you notice:
+Stop and re-evaluate when:
 
-- a long ordinary task has no human-readable update for about two minutes;
-- a checkpoint ends with “reply to continue” even though no gate exists;
-- a command log or subagent lifecycle is being used as a progress report;
-- a report uses a fake stage denominator or percentage;
-- edited, tested, CI, published, or accepted states are conflated;
-- repeated subagents produce no bounded batch summary;
-- a quiet mode was inferred from “direct execution” or “low interaction”;
+- the workpack has no observable done condition;
 - a diagnosis-only request is being changed, deployed, uploaded, or published;
-- a failure is repeated without a changed diagnosis;
-- user changes, secrets, or private identifiers are exposed.
+- a routine failure is repeated without a changed diagnosis;
+- a successful login is treated as publication approval;
+- separate write scopes overlap without a reason;
+- a test, build, preview, upload, release, or acceptance claim lacks its own evidence;
+- user changes, secrets, private identifiers, or unrelated files would be exposed or overwritten;
+- a convenient nearby cleanup is being treated as part of the mission without authorization.
 
 ## Quick checklist
 
 Before execution:
 
-- [ ] Mission, scope, non-goals, side-effect budget, and done conditions are explicit.
-- [ ] Observable mode is selected unless quiet is explicitly requested.
-- [ ] Kickoff checkpoint is ready; it will not ask for confirmation.
-- [ ] Workpacks have disjoint scopes, dependencies, and checks.
+- [ ] Objective, scope, non-goals, side-effect budget, and done conditions are explicit.
+- [ ] Required inputs and stop conditions are known.
+- [ ] Workpacks have disjoint scopes, dependencies, recovery routes, and checks.
 
 During execution:
 
-- [ ] Stage transitions and meaningful failures are reported with new information.
-- [ ] Long commands have a preflight note and a bounded heartbeat when needed.
-- [ ] Routine work continues after checkpoints.
-- [ ] Subagents, if any, have independent roles, bounded count, and a main-thread summary.
+- [ ] Safe work continues inside the authorized boundary.
+- [ ] Each workpack records evidence and a precise status.
+- [ ] Failures are diagnosed, bounded, and not hidden.
+- [ ] Delegated work, if any, has an independent scope and is verified by the main thread.
 - [ ] No out-of-scope edits, secret exposure, or silent authorization expansion occurs.
 
-Before reporting:
+Before closeout:
 
+- [ ] The diff contains only intended artifacts.
 - [ ] Edited, tested, built, previewed, uploaded, merged, released, and accepted states are separate.
 - [ ] Every claimed check has fresh evidence; unknowns remain visible.
-- [ ] The final report is public-safe, concise, and accurate.
+- [ ] The closeout record is public-safe and accurate.

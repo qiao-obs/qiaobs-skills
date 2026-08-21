@@ -1,49 +1,43 @@
 # Decision and authorization boundaries
 
-Use this reference before a mutation, external action, or user interruption. Communication and authorization are different layers.
-
-## CHECKPOINT versus GATE
-
-- `CHECKPOINT` is an informational progress message. Send it and continue without waiting.
-- `GATE` is a real authorization or input boundary. State the smallest user action and wait.
-
-A checkpoint must never end with “should I continue?” A low-interaction request defaults to visible `CHECKPOINT` updates, not silent execution.
+Use this reference before a mutation, external action, or status change. Work organization and authorization are separate concerns.
 
 ## Decision table
 
-| Situation | Default action | Report state |
+| Situation | Default action | Record state |
 | --- | --- | --- |
-| Read, inspect, search, or compare in scope | Continue | evidence collected; checkpoint when the phase changes |
+| Read, inspect, search, or compare in scope | Continue | evidence collected |
 | Reversible edit inside explicit scope | Continue | workpack active or verified |
-| Deterministic test/build/preview | Continue | verification evidence |
-| Failed routine command with a bounded diagnosis | Repair and retry | local failure handled; checkpoint if route changes |
-| Browser login, MFA, or missing human approval | Stop and ask once | `USER_ONLY` / `GATE` |
-| Permission denied by an external service | Stop external step | `EXTERNAL_WAIT` / `GATE` |
-| Paid, destructive, production, or irreversible action not explicitly authorized | Do not perform | `UNAUTHORIZED_HIGH_IMPACT` / `GATE` |
-| Missing fact changes the safe implementation or target | Gather safe evidence or stop | `MISSING_FACT` / `GATE` |
-| Repeated failure remains unexplained | Stop after bounded attempts | `FAILURE_UNRESOLVED` / `BLOCKED` |
+| Deterministic test, build, preview, or isolated install | Continue | verification evidence |
+| Failed routine command with a bounded diagnosis | Repair and retry | local failure handled |
+| Browser login, MFA, or missing human approval | Stop and request the smallest required input | `USER_ONLY` |
+| Permission denied by an external service | Stop the external step | `EXTERNAL_WAIT` |
+| Paid, destructive, production, public, or irreversible action not explicitly authorized | Do not perform | `UNAUTHORIZED_HIGH_IMPACT` |
+| Missing fact changes the safe implementation or target | Gather safe evidence or stop | `MISSING_FACT` |
+| Repeated failure remains unexplained | Stop after bounded attempts | `FAILURE_UNRESOLVED` |
 
 ## Authorization is not transitive
 
-Approval to edit a repository does not authorize production deployment, publishing a package, changing an account, sending an external message, or deleting data. A successful login proves access, not that a particular action is approved.
+Approval to edit a repository does not authorize production deployment, publishing a package, changing an account, sending an external message, or deleting data. A successful login proves access, not approval for a particular action.
 
-Low-interaction execution also does not authorize:
+Workpack execution also does not authorize:
 
 - revealing credentials or private records;
-- overwriting user modifications;
-- force-pushing or rewriting history;
-- deploying a server or uploading a client artifact outside the requested scope;
-- changing a neighboring feature because it looks related.
+- overwriting unrelated user modifications;
+- widening a diagnosis-only request into implementation;
+- treating a passing local check as proof of delivery or acceptance;
+- hiding an unknown result behind a likely assumption.
 
-When the mission explicitly authorizes a public branch, pull request, merge, or release, perform those actions only after the stated local and CI gates pass. If GitHub settings, review requirements, or another external state blocks the sequence, report the exact remaining action instead of claiming completion.
+## Factual blocker record
 
-## User-only gate message
+When a required input is unavailable, record only facts:
 
 ```text
-需要你处理｜GATE：<specific boundary>
-已完成：<safe work already finished>
-为什么必须停：<evidence-based reason>
-请只做：<smallest safe action; never paste a secret>
-完成标准：<observable result>
-你回复后我将：<next workpack and verification>
+Blocker: <specific missing input, permission, or external state>
+Evidence: <command, response, or inspection that proves it>
+Risk: <why guessing or proceeding is unsafe>
+Required input: <smallest non-secret action or fact needed>
+Resume condition: <observable condition for the next workpack>
 ```
+
+Never paste a secret into this record. Keep the record attached to the affected workpack rather than turning it into a general conversation script.

@@ -1,190 +1,161 @@
-# `run-autonomous-workpacks`: Complete Bounded Work with Visible Progress
+# `run-autonomous-workpacks`: Complete Bounded Work
 
-> 10-second definition: When a multi-stage mission is already authorized, turn it into bounded workpacks with visible progress, dependencies, safe retries, and a truthful final state.
+> 10-second definition: When a multi-stage mission is already authorized, turn it into bounded workpacks with explicit scope, dependencies, safe recovery, evidence, and a truthful closeout state.
 
 - [简体中文说明](run-autonomous-workpacks.zh-CN.md)
 - [Execution entrypoint](../../skills/run-autonomous-workpacks/SKILL.md)
 
-## Observable Autonomy Protocol
+## What this Skill is for
 
-This method means **low interruption, not low visibility**.
+Large tasks often contain inspection, implementation, tests, documentation, build work, and repository closeout. Without a work structure, the agent may lose the original scope, repeat a failed command, mix unrelated edits into the diff, or call a local result a delivered result.
 
-```text
-Low interruption, not low visibility.
-High autonomy, not expanded authorization.
-Continuous execution, not silent disappearance.
-Progress updates, not approval requests.
-Real blockers, not routine pauses.
-```
+`run-autonomous-workpacks` provides a compact execution method:
 
-Low interaction reduces mandatory user input, handoffs, and routine confirmation. It does not reduce the user’s awareness of the current phase, completed evidence, unverified work, risks, route changes, or release boundaries.
+1. establish the mission contract;
+2. split the mission into independently verifiable workpacks;
+3. order them by dependencies and side effects;
+4. execute safe work inside the authorized boundary;
+5. diagnose failures and retry only with a changed cause or input;
+6. verify the complete result and record the real final state.
 
-- `CHECKPOINT`: informational progress update; send it and continue;
-- `GATE`: real authorization or input boundary; wait only for login/MFA, permission denial, unauthorized high-impact work, material missing facts, or a critical result that cannot be safely verified.
+This Skill governs work organization, execution boundaries, and verification. It does not change Codex's native conversation, progress display, or subagent experience.
 
-The default mode is `observable`. Use `quiet` only when the user explicitly requests silent execution. For work expected to exceed two minutes, report kickoff, phase transitions, meaningful failures or route changes, and a new-information heartbeat when no natural milestone occurs. Do not stream every command or send empty “still working” messages.
+## When to use it
 
-Example:
+Use it when the request already contains enough authority and scope for several connected actions, such as:
 
-```text
-CHECKPOINT (non-blocking): Scope and baseline are verified; implementation is active; local validation and release checks are not run yet. I will continue and report at the next phase boundary.
-```
-## The expensive failure mode it addresses
+- inspect a repository, implement a bounded change, run tests, update docs, and prepare a review;
+- migrate a data shape with a rollback note, fixtures, validation, and a closeout record;
+- prepare a release package while keeping publication or production actions explicitly separate;
+- repair a cross-file issue where each work stage has a clear input and done condition.
 
-A broad mission often contains inspection, implementation, tests, documentation, build work, and closeout. If each stage becomes a separate confirmation loop, the agent spends the mission asking whether it may continue. If “autonomous” is interpreted as unlimited permission, it may instead edit, deploy, publish, or delete beyond the request.
+Do not use it for:
 
-This Skill manages the sequence without changing the authorization boundary.
-
-## Use it / do not use it
-
-Use it when the user has supplied an objective, scope, non-goals, and permission to carry out adjacent stages, for example:
-
-> Inspect the repository, refine the three skills, run validation and install smoke tests, then open and merge the authorized release change. Preserve existing history and stop for MFA or permission denial.
-
-Do not use it to turn “analysis only” into implementation, to infer permission from a successful login, or to perform unapproved production, paid, destructive, account, or publication actions. A small isolated task with no meaningful sequence does not need a workpack protocol.
-
-## Four boundaries to keep distinct
-
-```text
-Low interaction ≠ no reporting
-High autonomy ≠ expanded authorization
-Continuous execution ≠ ignoring failure
-Fewer questions ≠ guessing key facts
-```
-
-Routine, reversible, in-scope work can proceed without another confirmation. Login/MFA, external permission denial, human approval, a missing material fact, or an unauthorized high-impact action remains a real stop.
-
-## Workpack lifecycle
-
-```text
-Task contract → verifiable workpacks → dependency order
-→ diagnose/retry local failure → whole-result verification → COMPLETE/PARTIAL/BLOCKED
-```
-
-### 1. Write the task contract
-
-Before the first mutation, extract:
-
-- objective and observable done conditions;
-- allowed files, systems, artifacts, and external actions;
-- non-goals and forbidden side effects;
-- authoritative inputs and assumptions;
-- verification gates and final report shape;
-- stop conditions: `USER_ONLY`, `EXTERNAL_WAIT`, `UNAUTHORIZED_HIGH_IMPACT`, `MISSING_FACT`, or `FAILURE_UNRESOLVED`.
-
-### 2. Define workpack cards
-
-Each card needs one independently verifiable objective, exact write scope, inputs, dependencies, risk, done condition, checks, recovery note, status, and evidence. Good names are “Map the baseline,” “Refine the entrypoint,” “Run the link gate,” and “Close the release.”
-
-Keep write scopes disjoint where possible. A documentation pack should not silently edit code; an installation smoke test should use a private temporary destination.
-
-### 3. Execute in dependency waves
-
-1. **Discover:** read governing instructions and audit the baseline.
-2. **Prepare:** create the branch and controlled temporary locations.
-3. **Implement:** make the smallest coherent change.
-4. **Verify:** run narrow checks, then full checks.
-5. **Close:** review the diff and perform only the external actions explicitly authorized after local gates pass.
-
-Parallelize only independent checks that do not share mutable state.
-
-### 4. Diagnose and retry local failure
-
-Capture the command, exit code, and first useful error. Classify the issue as content, environment, dependency, permission, or external state. Make one bounded correction, rerun the smallest decisive check, and mark the workpack verified only when its done condition is supported.
-
-A safe retry of an idempotent network request may be reasonable. An authentication failure is not an invitation to keep retrying. An unresolved failure after bounded attempts becomes `PARTIAL` or `BLOCKED`, not an implied pass.
+- a one-line rewrite, translation, fact lookup, or isolated syntax explanation;
+- analysis-only or diagnosis-only work where mutation is forbidden;
+- an ambiguous task whose next mutation depends on a missing material fact;
+- payment, deletion, production, publication, account changes, or other high-impact work without explicit authorization.
 
 ## Inputs and outputs
 
-Inputs:
+### Inputs
 
-- user request, attached prompt, repository instructions, and current state;
-- allowed write scope and side-effect budget;
-- authoritative verification commands;
-- external results needed for completion.
+- objective and acceptance criteria;
+- allowed and forbidden paths or systems;
+- authoritative files, records, tests, and constraints;
+- external actions that are explicitly allowed or must remain separate;
+- existing user edits that must be preserved.
 
-Outputs:
+### Outputs
 
-- task contract and execution board;
-- changed artifacts and intentionally untouched scope;
-- each workpack’s checks, failure evidence, and recovery;
-- skipped, unknown, and blocked gates;
-- final `COMPLETE`, `PARTIAL`, or `BLOCKED` state.
+- mission contract;
+- workpack cards and dependency board;
+- per-pack changes, checks, failures, retries, and evidence;
+- explicitly untouched scope;
+- layered verification with `verified`, `unknown`, `skipped`, `failed`, or `blocked` states;
+- `COMPLETE`, `PARTIAL`, or `BLOCKED` closeout.
 
-Minimum final report:
+## The workpack method
 
-```text
-Outcome: COMPLETE | PARTIAL | BLOCKED
-Completed workpacks:
-Changed artifacts:
-Verification:
-Assumptions:
-Open blockers or follow-ups:
-```
+### 1. Write the mission contract
 
-## Complete anonymized case
+Record the objective, scope, non-goals, side-effect budget, authoritative inputs, acceptance criteria, and stop conditions before editing. A successful login is access evidence, not permission for every external action.
 
-A public Skill repository refinement can include baseline audit, content restructuring, visual assets, six bilingual user guides, validators, installation smoke tests, CI, a pull request, merge, and a release. The method turns this into independent packs with controlled write scopes rather than one opaque stream of edits.
+### 2. Define workpack cards
 
-If local validation succeeds but GitHub rejects a push or merge, the local packs can still be verified. The external pack is `EXTERNAL_WAIT`; the report must not claim a release.
+Every card needs one objective, exact allowed writes, untouched paths, inputs, dependencies, risk, done condition, checks, recovery route, status, and evidence. Keep documentation, implementation, installation, and publication scopes separate.
 
-## Ordinary handling versus this Skill
+### 3. Execute in dependency order
 
-| Ordinary handling | With `run-autonomous-workpacks` |
-| --- | --- |
-| Ask before each routine command | Continue through safe, authorized workpacks |
-| Keep a vague to-do list | Give each pack a done condition and check |
-| Retry a failure without diagnosis | Classify, correct once, and rerun the decisive check |
-| Treat login as publication approval | Distinguish access from action authorization |
-| Hide skipped external steps | Report `unknown`, `skipped`, `PARTIAL`, or `BLOCKED` honestly |
+Discover the baseline first. Prepare only required fixtures or temporary locations. Implement the smallest coherent change. Verify the focused behavior and then the repository-wide result. Perform external actions only after local evidence supports them and the request explicitly authorizes them.
 
-## Three copyable prompts
+### 4. Recover from failure
 
-1. “Execute this authorized multi-stage mission with bounded workpacks. Preserve existing edits, avoid destructive commands, keep a short progress report, and stop only for real blockers.”
-2. “Only analyze; do not modify, deploy, upload, publish, or delete. Build the workpack plan and evidence board, and mark mutation packs as not authorized.”
-3. “A verification pack failed. Preserve the output, classify the failure, make one evidence-based correction, retry the smallest decisive check, and report the resulting state.”
+Capture the command and exit code. Classify the first relevant error. Make one diagnosed correction. Rerun the smallest decisive check. If the cause remains unexplained after bounded attempts, retain the failure as `PARTIAL` or `BLOCKED`; never turn an assumption into a pass.
 
-## Typical output fragment
+### 5. Close with separate evidence
+
+A source diff proves an intended edit. A test proves only the covered harness. A build proves artifact generation. A preview, upload, release, or user report proves its own layer. The closeout must not conflate these claims.
+
+## An anonymized case
+
+A public Skill repository refinement task contained baseline inspection, entrypoint edits, references, bilingual guides, image assets, deterministic validation, isolated installation, CI, pull request review, merge, and release. The safe decomposition was:
+
+- WP-01: inspect the current branch, remote, release, and worktree;
+- WP-02: refine Skill entrypoints and references;
+- WP-03: generate and inspect assets and README rendering;
+- WP-04: run static, unit, link, privacy, and installation checks;
+- WP-05: enter review and release actions only after local evidence passes.
+
+When an external permission was unavailable, the first four packs remained useful and the release pack stayed explicitly blocked. Local evidence was not presented as publication evidence.
+
+## Copyable prompts
+
+### Prompt 1: authorized implementation
+
+> Execute this authorized multi-stage task across audit, implementation, regression tests, documentation, and closeout. Preserve existing edits, keep writes inside the named scope, avoid destructive commands, and distinguish local verification from external delivery.
+
+### Prompt 2: diagnosis-only boundary
+
+> Diagnose the issue without modifying, deploying, or uploading. Build an evidence-oriented workpack record, mark mutation work as unauthorized, and identify the smallest fact needed for a later implementation.
+
+### Prompt 3: bounded retry
+
+> A validation command failed. Preserve the command and exit code, classify the cause, make one diagnosed correction, rerun the decisive check, and leave the result `verified`, `unknown`, `partial`, or `blocked` according to evidence.
+
+## Typical closeout record
 
 ```text
 Outcome: PARTIAL
 Completed workpacks:
-- WP-01 baseline audit: verified
+- WP-01 baseline: verified
 - WP-02 scoped implementation: verified
 - WP-03 deterministic checks: verified
 Changed artifacts:
-- README.md: default product narrative
-- skills/<name>/SKILL.md: concise execution entrypoint
+- README.md: default narrative
+- skills/<name>/SKILL.md: progressive disclosure
 Verification:
-- local validation: PASS
-- external merge: SKIPPED — permission denied
+- repository validation: PASS
+- isolated install: PASS
+- remote merge: SKIPPED — permission denied
+Untouched scope:
+- production systems and unrelated user edits
 Open blockers:
-- maintainer action required before merge
+- one maintainer action is required before merge
 ```
 
-## Boundaries, anti-patterns, and failure conditions
+## Failure conditions
 
-- Do not override an explicit “do not modify” instruction.
-- Do not use low interaction to expand scope, bypass MFA, or infer publication permission.
-- Do not overwrite user changes or rewrite history destructively.
-- Do not mark a workpack `verified` without its listed check.
-- Do not repeat the same failing command without changing the diagnosed cause.
-- Do not omit progress at meaningful milestones; low interruption still requires transparent state.
+- treating a diagnosis request as implementation permission;
+- creating a card without a done condition or exact write scope;
+- repeating a failed command without a changed diagnosis;
+- inferring publication from a local test or a successful login;
+- overlapping temporary directories between independent checks;
+- resetting or cleaning unknown user files;
+- claiming `COMPLETE` while a required evidence layer is unknown.
 
-## How to combine it
+## Composition
 
-- Pair with `trace-feature-chain` when the first mismatch must be located before implementation.
-- Pair with `reason-from-reality` when a long-term decision or learning loop must be executed and updated.
-- Do not load all three for a simple syntax fix, translation, rewrite, or one-off fact.
+Use `trace-feature-chain` when the main problem is locating a cross-layer mismatch. Use `reason-from-reality` when the main problem is learning, planning, assessment, or belief update from evidence. Add this Skill only for the authorized execution portion, not as a replacement for the primary reasoning method.
 
 ## FAQ
 
-**When can the agent continue?** When the work is reversible, in scope, supported by known inputs, and does not create an unapproved high-impact side effect.
+### Does this Skill grant publication permission?
 
-**When must it stop?** For user-only authentication/MFA, external permission denial, unapproved production/paid/destructive work, a material missing fact, or unresolved failure after bounded retries.
+No. It organizes work that is already authorized. Publication, production changes, paid actions, deletion, account changes, and external messages require their own explicit authorization.
 
-**What is `PARTIAL`?** Useful work is verified, but a bounded nonessential or externally unobservable criterion remains open.
+### Can it be used for diagnosis-only work?
 
-**What is `BLOCKED`?** The next required safe action cannot proceed without user input or an external state change.
+It may help structure read-only evidence collection, but it must keep mutation packs out of scope and must not infer implementation permission.
 
-**Why report milestones?** Fewer handoffs should reduce friction, not reduce transparency. A milestone tells the user what changed, which layer was verified, and whether the next step has external side effects.
+### What is the difference between `PARTIAL` and `BLOCKED`?
+
+`PARTIAL` means useful work is verified while a bounded gap remains. `BLOCKED` means a required next action cannot safely proceed without user input or an external state change.
+
+### Why separate build, preview, upload, and release?
+
+Each layer proves a different fact. Keeping them separate prevents a local source or test result from being presented as a result that a user can actually receive.
+
+### Does it change the native Codex experience?
+
+No. It defines work decomposition and evidence, while Codex retains its native interaction and presentation behavior.

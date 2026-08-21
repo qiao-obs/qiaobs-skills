@@ -48,7 +48,7 @@ Exposure → explanation → cue-free retrieval → procedure
 → transfer to a changed surface → delayed retention
 ```
 
-AI may explain, generate practice, check work, and schedule a re-test. It must not quietly replace the user's own retrieval, derivation, writing, problem solving, or programming when those capabilities are the target. Read [learning-transfer-and-retention.md](references/learning-transfer-and-retention.md) when designing a study loop.
+AI may explain, generate practice, check work, and schedule a re-test. It must not substitute for the user's own retrieval, derivation, writing, problem solving, or programming when those capabilities are the target. Read [learning-transfer-and-retention.md](references/learning-transfer-and-retention.md) when designing a study loop.
 
 ## Safety and uncertainty
 
@@ -75,6 +75,6 @@ Observed → inferred → do next → measure → update if...
 
 ## Composition
 
-- Pair with `run-autonomous-workpacks` when the loop should run as a bounded, low-interaction work package.
+- Pair with `run-autonomous-workpacks` when the loop should run as a bounded work package.
 - Pair with `trace-feature-chain` when the evidence problem is a software or release chain; trace the first mismatch first, then decide and update.
 - Do not load all three for a simple syntax fix, translation, rewrite, or isolated factual answer.

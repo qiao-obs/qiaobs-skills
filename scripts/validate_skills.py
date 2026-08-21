@@ -212,18 +212,18 @@ def validate_composition(errors: list[str]) -> None:
     scan_public_text(path, errors)
 
 
-def validate_observable_autonomy_scenarios(errors: list[str]) -> None:
-    path = ROOT / "evals" / "observable-autonomy-scenarios.md"
+def validate_workpack_execution_scenarios(errors: list[str]) -> None:
+    path = ROOT / "evals" / "workpack-execution-scenarios.md"
     if not path.exists():
         fail(errors, f"missing {path.relative_to(ROOT)}")
         return
     text = read_text(path)
-    required_ids = [f"OA-{index:02d}" for index in range(1, 11)]
+    required_ids = [f"WP-{index:02d}" for index in range(1, 9)]
     if any(identifier not in text for identifier in required_ids):
-        fail(errors, f"{path.relative_to(ROOT)}: expected OA-01 through OA-10")
-    for phrase in ("CHECKPOINT", "GATE", "Visibility", "Non-blocking autonomy", "State accuracy", "Noise control", "Delegation discipline", "Gate correctness", "NOT RUN"):
+        fail(errors, f"{path.relative_to(ROOT)}: expected WP-01 through WP-08")
+    for phrase in ("Scope boundary", "Authorization", "Failure recovery", "Evidence layers", "Native interaction boundary", "NOT RUN"):
         if phrase not in text:
-            fail(errors, f"{path.relative_to(ROOT)}: missing behavior-rubric phrase {phrase}")
+            fail(errors, f"{path.relative_to(ROOT)}: missing scenario-rubric phrase {phrase}")
     scan_public_text(path, errors)
     validate_markdown_links(path, errors)
 
@@ -232,7 +232,7 @@ def validate_repository_docs(errors: list[str]) -> None:
         ROOT / "README.md", ROOT / "README.en.md", ROOT / "README.zh-CN.md", ROOT / "LICENSE",
         ROOT / "CHANGELOG.md", ROOT / "CONTRIBUTING.md", ROOT / "CODE_OF_CONDUCT.md", ROOT / "SECURITY.md",
         ROOT / "ACKNOWLEDGEMENTS.md", ROOT / "docs" / "skill-engineering-notes.md", ROOT / "docs" / "origins-and-method.md",
-        ROOT / "evals" / "verification-record.md", ROOT / "evals" / "observable-autonomy-scenarios.md", ROOT / "assets" / "hero-light.png", ROOT / "assets" / "hero-dark.png",
+        ROOT / "evals" / "verification-record.md", ROOT / "evals" / "workpack-execution-scenarios.md", ROOT / "assets" / "hero-light.png", ROOT / "assets" / "hero-dark.png",
         ROOT / "assets" / "social-preview.png", ROOT / "assets" / "banner.svg",
     ]
     for path in required:
@@ -281,7 +281,7 @@ def main() -> int:
     for name in sorted(EXPECTED):
         validate_skill(name, errors)
     validate_evals(errors)
-    validate_observable_autonomy_scenarios(errors)
+    validate_workpack_execution_scenarios(errors)
     validate_repository_docs(errors)
     validate_public_tree(errors)
     if errors:

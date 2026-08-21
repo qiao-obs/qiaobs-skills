@@ -37,7 +37,7 @@ They are **independent capabilities that compose when useful**, not a bundle tha
 | Situation | Use | Delivers |
 | --- | --- | --- |
 | A feature fails only for a role, device, entry point, data state, or released version | [`trace-feature-chain`](skills/trace-feature-chain/SKILL.md) | First mismatch, smallest repair, layered proof, and an honest release boundary |
-| An authorized mission spans inspection, implementation, tests, docs, and closeout | [`run-autonomous-workpacks`](skills/run-autonomous-workpacks/SKILL.md) | Bounded workpacks, dependency order, retries, checkpoints, and final state |
+| An authorized mission spans inspection, implementation, tests, docs, and closeout | [`run-autonomous-workpacks`](skills/run-autonomous-workpacks/SKILL.md) | Bounded workpacks, dependency order, recovery, and final state |
 | Long-term learning, diagnosis, planning, or decisions need evidence and updates | [`reason-from-reality`](skills/reason-from-reality/SKILL.md) | Fact/judgment/action/validation/unknown, measures, re-tests, and switch rules |
 
 ### 1. TRACE · Trace Feature Chain
@@ -75,23 +75,9 @@ Real scenario → identity/permission → command/API → data/contract
 
 Read more: [user guide](docs/skills/trace-feature-chain.md) · [execution entrypoint](skills/trace-feature-chain/SKILL.md) · [evidence matrix](skills/trace-feature-chain/references/evidence-matrix.md)
 
-### 2. EXECUTE · Observable Autonomy Workpacks
+### 2. EXECUTE · Bounded Autonomous Workpacks
 
-**Value in one line:** When a mission is already authorized and spans adjacent stages, finish bounded, verifiable work with fewer handoffs and visible progress; send a checkpoint and continue instead of turning the user into a scheduler.
-
-**Method name:** Observable Autonomy Protocol.
-
-```text
-Low interruption, not low visibility.
-High autonomy, not expanded authorization.
-Continuous execution, not silent disappearance.
-Progress updates, not approval requests.
-Real blockers, not routine pauses.
-```
-
-**What low interaction reduces:** The user does not have to decompose the task, reply “continue” after each step, choose routine implementation details, copy results between agents, or approve every safe authorized command.
-
-**What low interaction does not reduce:** The user’s awareness of the current phase, completed evidence, unverified work, route changes, risks, authorization boundaries, and final state.
+**Value in one line:** When a mission is already authorized and spans adjacent stages, organize it as bounded, verifiable workpacks, reduce manual handoffs, and continue toward complete, partial, or genuinely blocked work.
 
 **Use it / do not use it:**
 
@@ -101,34 +87,32 @@ Real blockers, not routine pauses.
 **Core lifecycle:**
 
 ```text
-Task contract → verifiable workpacks → dependency order
-→ CHECKPOINT (send and continue) → diagnose/retry local failure
-→ whole-result verification → COMPLETE/PARTIAL/BLOCKED
+Task contract → workpack cards → dependency order
+→ safe execution → diagnosed, bounded retries
+→ layered verification → COMPLETE/PARTIAL/BLOCKED
 ```
 
-**CHECKPOINT versus GATE:**
+**A workpack records:** objective, done condition, inputs, dependencies, exact write scope, explicitly untouched scope, risk, checks, recovery route, and evidence. Source, tests, build, preview, upload, merge, release, and user acceptance prove different layers and cannot substitute for one another.
 
-- `CHECKPOINT` is an informational progress update: state completed, active, unverified, release status, and next step; do not wait for a reply.
-- `GATE` is a real authorization/input boundary: use only for login/MFA, permission denial, unauthorized high-impact work, material missing facts, or unverifiable critical results; wait explicitly.
+**What it does not change:** This Skill governs work organization, execution boundaries, and verification. It does not change Codex's native conversation, progress display, or subagent experience.
 
-**Output:** Execution board, phase checkpoints, write scopes and checks, failure/retry evidence, changed and untouched artifacts, layered verification, final state, and the one required user action if any.
-
-| The user does not need to | Codex must |
+| The user does not need to | The Skill handles |
 | --- | --- |
-| Reply “continue” after every step | Send concise phase updates and continue without a gate |
-| Choose routine implementation details | Decide inside evidence and authorization boundaries |
-| Read command logs to infer state | State completed, active, unverified, and release status |
-| Coordinate multiple subagents | Explain roles, batch results, and main-thread integration |
+| Decompose already-authorized adjacent steps | Workpacks with dependencies and done conditions |
+| Copy file lists and check results between stages | Inputs, outputs, and evidence records |
+| Infer delivery from a local test result | Separate verified, unknown, skipped, and blocked layers |
+| Re-decide routine implementation details | Continuous execution inside authorization and safety boundaries |
 
 **A realistic prompt:**
 
-> Execute this authorized mission end to end. Reduce handoffs, but keep me informed of the current phase without waiting for replies. Preserve existing edits, use no destructive commands, and stop only for login/MFA, permission denial, or an unauthorized high-impact action.
+> Execute this authorized mission across audit, implementation, regression tests, documentation, and Git closeout. Preserve existing edits and use no destructive commands. Stop only for login/MFA, permission denial, an unauthorized high-impact action, or a material missing fact, and keep each evidence layer distinct.
 
-**Short output example:**
+**A short closeout record:**
 
-> **CHECKPOINT (non-blocking):** Baseline and scope are verified; implementation is next; static checks, install smoke, CI, PR, and Release are not run/created yet. I will continue. If the external service requires MFA, I will establish a **GATE** rather than report local success as publication.
+> `PARTIAL`: baseline audit, implementation, and target tests are verified; remote merge was skipped after permission denial. Changed and untouched paths are recorded, and local success is not called publication.
 
-Read more: [user guide](docs/skills/run-autonomous-workpacks.md) · [execution entrypoint](skills/run-autonomous-workpacks/SKILL.md) · [communication contract](skills/run-autonomous-workpacks/references/communication-and-progress-contract.md)
+Read more: [user guide](docs/skills/run-autonomous-workpacks.md) · [execution entrypoint](skills/run-autonomous-workpacks/SKILL.md) · [workpack lifecycle](skills/run-autonomous-workpacks/references/workpack-lifecycle.md)
+
 ### 3. UPDATE · Reason From Reality
 
 **Value in one line:** Turn reusable practical principles, scientific method, learning science, and feedback control into a measurable action loop where results—not elegant explanations—decide the next move.
@@ -167,7 +151,7 @@ Do not load all three for completeness:
 
 | Situation | Primary Skill | Optional companion |
 | --- | --- | --- |
-| Cross-layer bug across backend, device, and release | `trace-feature-chain` | `run-autonomous-workpacks` for low-interaction execution |
+| Cross-layer bug across backend, device, and release | `trace-feature-chain` | `run-autonomous-workpacks` for bounded execution |
 | Root cause is known and the implementation is large | `run-autonomous-workpacks` | Usually neither of the other two |
 | Long-term study, diagnosis, and review | `reason-from-reality` | `run-autonomous-workpacks` for bounded execution |
 | Simple syntax fix, translation, rewrite, or one-off fact | None required | Keep it simple |

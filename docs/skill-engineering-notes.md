@@ -24,6 +24,7 @@
 5. Static checks fail closed on missing, duplicate, unfinished, private, inconsistent, or visually invalid artifacts.
 6. README and user guides explain value before repository mechanics; visual assets use a restrained family and preserve dark/light contrast.
 7. CI is deterministic and does not spend paid model calls.
+8. Skills define work methods and evidence; they do not replace native Codex interaction or presentation behavior.
 
 ## Deliberately not adopted
 

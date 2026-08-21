@@ -28,17 +28,17 @@
     },
     {
       "id": "raw-06",
-      "prompt": "少打扰我，但请持续告诉我做到哪里；每次进度不需要等我回复。",
+      "prompt": "Complete an authorized refactor across source, tests, and documentation while preserving existing user edits and recording evidence for each workpack.",
       "should_trigger": true
     },
     {
       "id": "raw-07",
-      "prompt": "直接执行整个任务。不要每一步问我，也不要十分钟不说话；用简洁的阶段进度主动汇报。",
+      "prompt": "Turn this authorized data migration into bounded workpacks with dependencies, rollback notes, verification, and a truthful closeout state.",
       "should_trigger": true
     },
     {
       "id": "raw-08",
-      "prompt": "Use two independent subagents to audit in parallel, but have the main thread report their roles, completed count, findings, and integration status.",
+      "prompt": "Partition independent repository checks into disjoint workpacks and verify their results before declaring the mission complete.",
       "should_trigger": true
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "id": "raw-10",
-      "prompt": "Continue autonomously with concise, non-blocking progress updates. If a test fails, diagnose and retry within scope, then distinguish partial from complete.",
+      "prompt": "A validation command failed during an authorized multi-stage task. Diagnose the cause, make one bounded correction, retry the decisive check, and distinguish verified from unresolved work.",
       "should_trigger": true
     },
     {
