@@ -2,6 +2,13 @@
 
 All notable changes to this project are documented here.
 
+## [0.2.1] - 2026-08-21
+
+### Fixed
+
+- Updated the live README release pointers after `v0.2.0` publication; the immutable `v0.2.0` tag remains unchanged.
+- Recorded this patch as release metadata only; no Skill behavior or interaction boundary was changed.
+
 ## [0.2.0] - 2026-08-21
 
 ### Added
