@@ -28,17 +28,17 @@
     },
     {
       "id": "raw-06",
-      "prompt": "不要每一步都问我确认；把可执行事项连续完成，只在外部平台审批时暂停并给出唯一操作。",
+      "prompt": "少打扰我，但请持续告诉我做到哪里；每次进度不需要等我回复。",
       "should_trigger": true
     },
     {
       "id": "raw-07",
-      "prompt": "Organize this into inspect → implement → verify → document → close, with checkpoints and no destructive commands.",
+      "prompt": "直接执行整个任务。不要每一步问我，也不要十分钟不说话；用简洁的阶段进度主动汇报。",
       "should_trigger": true
     },
     {
       "id": "raw-08",
-      "prompt": "A second agent must be able to continue this work from a self-contained handoff. Generate and execute the safe parts now.",
+      "prompt": "Use two independent subagents to audit in parallel, but have the main thread report their roles, completed count, findings, and integration status.",
       "should_trigger": true
     },
     {
@@ -48,7 +48,7 @@
     },
     {
       "id": "raw-10",
-      "prompt": "When a test fails, diagnose and retry within scope instead of stopping after the first error; distinguish partial from complete.",
+      "prompt": "Continue autonomously with concise, non-blocking progress updates. If a test fails, diagnose and retry within scope, then distinguish partial from complete.",
       "should_trigger": true
     },
     {

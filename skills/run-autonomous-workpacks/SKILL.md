@@ -1,284 +1,142 @@
 ---
 name: run-autonomous-workpacks
-description: Use when a user supplies a broad multi-step mission or master prompt and expects low-interaction, high-autonomy execution through bounded workpacks, parallelizable sub-tasks, evidence-based verification, and a concise final report.
+description: Use for authorized multi-step work that should continue with few user decisions while remaining visibly trackable. Organize bounded workpacks, send concise non-blocking progress at kickoff, phase transitions, and bounded heartbeats, verify outcomes with evidence, and pause only for real blockers or new authorization. Do not use for analysis-only, diagnosis-only, or trivial one-step requests.
 ---
 
-# Run Autonomous Workpacks
+# Autonomous Workpacks
 
-## Purpose
+Complete authorized multi-stage work as bounded, inspectable workpacks. The method is **Observable Autonomy Protocol**: reduce forced user input without reducing the user's awareness of state, evidence, risk, or boundaries.
 
-Turn a broad mission into bounded workpacks and complete them with minimal interruption. Prefer verified progress over conversational narration. Preserve the user’s scope, constraints, and definition of done.
+## Observable autonomy contract
 
-This skill governs execution discipline. It does not expand authorization or bypass safety, privacy, or repository boundaries.
+- **Minimize mandatory user input, not user awareness. A progress checkpoint is informational: send it and continue. Wait only at a real gate.**
+- Low interaction means fewer confirmations, handoffs, and routine implementation questions; it does not mean silence.
+- High autonomy means continuous execution inside the authorized scope; it does not expand authorization.
+- Progress reports are not approvals. Use `CHECKPOINT` for non-blocking information and `GATE` for a real wait.
+- Default to `observable` mode. Use `quiet` only when the user explicitly asks for silent execution. Use `high-visibility` only when explicitly requested.
+- Do not stream commands, expose internal reasoning, manufacture percentages, or ask “should I continue?” after a routine checkpoint.
 
-## Operating contract
+Read [communication-and-progress-contract.md](references/communication-and-progress-contract.md) for mode rules, timing, templates, status queries, long commands, and optional subagent visibility.
 
-### 1. Parse the mission before acting
+## Mission contract
 
-Extract and preserve:
+Before the first mutation, extract and preserve:
 
-- **Objective:** the outcome the user wants.
-- **Scope:** files, systems, features, and artifacts that may change.
-- **Non-goals:** work that must not be performed.
-- **Acceptance criteria:** observable conditions for completion.
-- **Constraints:** tools, style, compatibility, time, privacy, and interaction limits.
-- **Inputs:** the authoritative files, prompt sections, data, or commands.
-- **Side-effect budget:** actions that are allowed, forbidden, or require confirmation.
-- **Stop conditions:** when to finish, escalate, or return a partial result.
+- objective and observable done condition;
+- allowed files, systems, artifacts, and external actions;
+- non-goals and forbidden side effects;
+- authoritative inputs, assumptions, and required facts;
+- verification gates and final report shape;
+- stop conditions: `USER_ONLY`, `EXTERNAL_WAIT`, `UNAUTHORIZED_HIGH_IMPACT`, `MISSING_FACT`, or `FAILURE_UNRESOLVED`.
 
-Treat explicit user instructions as higher priority than default conventions. Treat safety and authorization boundaries as non-overridable.
+Send a short kickoff `CHECKPOINT` before the first substantive tool call or subagent. It is informational and must not wait for a reply.
 
-When the master prompt is incomplete, infer only low-risk details from repository evidence and established conventions. Record material assumptions; do not invent requirements.
+## Workpack lifecycle
 
-### 2. Default to autonomous execution
-
-Proceed without asking for confirmation when an action is reversible, in scope, and supported by the mission:
-
-- Inspect files, configuration, history, and tool output.
-- Search for relevant symbols, references, tests, and instructions.
-- Plan, implement, refactor, format, and generate artifacts inside scope.
-- Run targeted tests, linters, builds, type checks, previews, and local validation.
-- Compare alternatives using evidence and choose the smallest safe option.
-- Continue through independent workpacks after one workpack finishes.
-
-Do not ask the user to select routine implementation details. Do not ask “what next?” when the mission still has unfinished work. Do not request approval for every command or intermediate edit.
-
-### 3. Ask only for a real blocker
-
-Pause and ask a concise, batched question only when one of these is true:
-
-- A required input, permission, or safe access path is missing.
-- The next action is destructive, irreversible, externally visible, paid, or materially risky and is not explicitly authorized.
-- The request has two materially different outcomes and the prompt does not establish a safe default.
-- A contradiction in the requirements changes the objective or acceptance criteria.
-- Bounded diagnosis cannot resolve a failure or environment limitation.
-
-Never ask the user to paste a secret. Request a safe artifact, a redacted value, a configured access path, or an explicit non-secret decision instead.
-
-A blocker message must state:
-
-1. What is blocked.
-2. What has already been completed.
-3. Why the next step cannot proceed safely.
-4. The smallest input or decision needed.
-5. What will happen after the blocker is resolved.
-
-If no blocker exists, continue autonomously.
-
-## Workpack protocol
-
-### Design workpacks
-
-Create a workpack for each independently verifiable outcome. Keep each workpack small enough to reason about and large enough to produce a useful artifact.
-
-Every workpack must have:
-
-- A short imperative name.
-- One objective and a clear done condition.
-- Explicit inputs and allowed write scope.
-- Dependencies and expected outputs.
-- Validation commands or inspection checks.
-- Risk and rollback notes when relevant.
-- A status: `queued`, `active`, `blocked`, `verified`, `failed`, or `skipped`.
-
-Prefer workpacks such as “Map the existing flow,” “Implement the narrow change,” “Add regression coverage,” and “Run the release gate” over vague work such as “Improve the project.”
-
-### Sequence and parallelize
-
-Run workpacks in waves:
-
-1. **Discover:** read governing instructions, inspect the relevant surface, and establish the baseline.
-2. **Prepare:** define interfaces, fixtures, schemas, or test cases needed by later work.
-3. **Execute:** implement independent changes in parallel when safe.
-4. **Integrate:** reconcile outputs through one owner and resolve conflicts deliberately.
-5. **Verify:** run targeted and cross-cutting checks.
-6. **Close:** review the diff, sanitize the report, and deliver the result.
-
-Parallelize only when workpacks have no ordering dependency and do not share mutable files or state. Give each worker a non-overlapping write scope. Use one integrator for shared files, conflict resolution, and final verification.
-
-If parallel workers are unavailable, keep the same workpack boundaries and run the wave sequentially.
-
-### Execute each workpack
-
-For every workpack:
-
-1. Read the relevant source of truth before editing.
-2. State the smallest implementation hypothesis.
-3. Make the smallest coherent change inside the allowed scope.
-4. Run the workpack’s checks immediately.
-5. Preserve useful evidence: changed files, command results, failures, and assumptions.
-6. Mark the workpack `verified` only when its done condition is demonstrated.
-7. Move to the next independent workpack instead of waiting for conversational approval.
-
-Do not hide a failed check by changing the acceptance criterion. Do not mark a workpack complete because an edit was made; mark it complete because the result was verified.
-
-## Evidence and verification
-
-Use the strongest available evidence, in this order:
-
-1. A focused automated test or reproducible check.
-2. A broader test, type check, lint, build, or schema validation.
-3. A rendered preview, runtime inspection, or end-to-end smoke check.
-4. A careful diff and source inspection when automation is unavailable.
-5. A documented manual check with clear limits.
-
-For behavior changes, write or update a focused regression test before implementation when the project supports tests. Verify the expected failure, implement the smallest change, then verify the pass. For documentation, configuration, or generated artifacts, use the applicable parser, linter, schema check, renderer, or structural inspection instead of forcing a code-test workflow.
-
-Always check:
-
-- Exit status, not only visible output.
-- The changed surface, not only the happy path.
-- Relevant existing tests for regressions.
-- Unintended files, generated noise, and formatting churn.
-- Security, privacy, and public-safety constraints.
-
-A skipped check is not a passing check. Report the gap and its impact.
-
-## Failure handling
-
-Classify a failure before retrying:
-
-- **Requirement ambiguity:** revisit the mission contract.
-- **Missing context:** inspect the authoritative source or request a safe input.
-- **Implementation defect:** reproduce, fix, and rerun the narrow check.
-- **Regression:** compare the baseline and affected path; do not weaken the test.
-- **Tool or environment failure:** try one evidence-based alternative, then record the limitation.
-- **Safety or authorization boundary:** stop the risky action and escalate.
-
-Use a bounded retry budget. Change the hypothesis between retries; do not repeat the same command hoping for a different result. Continue unaffected workpacks when the dependency graph allows it. Preserve partial results and clearly label blocked or unverified outputs.
-
-## Scope and side-effect guards
-
-Before writing, resolve the intended target and verify that it is inside the user-authorized scope. Treat the scope as a hard boundary.
-
-Allowed by default when explicitly in scope:
-
-- Reading local project files.
-- Editing source, tests, documentation, and configuration.
-- Creating temporary or derived artifacts needed for validation.
-- Running local checks and previews.
-
-Require explicit authorization or confirmation when not already granted by the prompt:
-
-- Deleting or overwriting data that cannot be restored.
-- Editing outside the stated scope.
-- Publishing, deploying, sending messages, opening external resources, or changing durable external state.
-- Spending money, changing credentials or permissions, or handling personal data.
-- Exposing or copying secrets, private keys, tokens, cookies, or confidential inputs.
-
-Do not expand scope merely because a nearby issue is interesting. Record adjacent findings as follow-ups unless they are required for the stated done condition.
-
-## Public-safe handling
-
-Assume that skill text, examples, reports, logs, and generated artifacts may be shared publicly.
-
-Never include or echo:
-
-- Real local or network project paths.
-- Real domains, URLs, IP addresses, repository hosts, or service endpoints.
-- Commit hashes, access tokens, API keys, private keys, cookies, passwords, or secret environment values.
-- Real account names, email addresses, organization identifiers, customer data, or personal data.
-- Unredacted command output that may contain any of the above.
-
-Use neutral labels such as `workspace-root`, `external-endpoint`, `account`, `commit-id`, `secret`, and `redacted`; never publish real values. Prefer project-relative file names in user-facing reports. Redact query strings, authorization headers, and identifiers before quoting evidence.
-
-Do not inspect a secret merely to prove that it exists. If a check needs credentials, use the configured access mechanism and report only whether the check succeeded or failed.
-
-## Low-interaction communication
-
-Keep progress updates milestone-based:
-
-- **Start:** one short statement of the interpreted objective and execution mode when useful.
-- **Milestone:** summarize completed workpacks and the next wave only when the work is long-running or a decision boundary is reached.
-- **Blocker:** ask one batched, actionable question only when required.
-- **Finish:** provide the final report.
-
-Do not narrate every file read, command, or thought. Do not stream speculative options. Make routine decisions silently and record only decisions that affect reproducibility, scope, risk, or acceptance.
-
-## Final report
-
-Finish with a compact, evidence-based report:
+Use the lifecycle in [workpack-lifecycle.md](references/workpack-lifecycle.md):
 
 ```text
-Outcome: complete | partial | blocked
-
-Completed workpacks:
-- <workpack>: <verified result>
-
-Changed artifacts:
-- <project-relative-path>: <purpose>
-
-Verification:
-- <check>: passed | failed | skipped — <brief evidence>
-
-Assumptions:
-- <material assumption, or “none”>
-
-Open blockers or follow-ups:
-- <item, or “none”>
+Task contract → verifiable workpacks → dependency order
+→ execute and checkpoint → diagnose/retry local failure
+→ validate the whole result → COMPLETE / PARTIAL / BLOCKED
 ```
 
-Use `partial` when useful work is complete but the definition of done is not fully met. Use `blocked` only when the next required action cannot proceed safely without new user input or an external state change. Never claim a check passed when it was not run or its result is unknown.
+Each workpack needs one objective, non-overlapping write scope, inputs, dependencies, done condition, checks, risk, recovery note, and status. Use `queued`, `active`, `blocked`, `verified`, `failed`, or `skipped` precisely.
+
+Report `CHECKPOINT` when baseline discovery is frozen, when implementation begins, when a workpack or wave completes, when verification begins, when a key assumption changes, or when local gates finish before external actions. Include completed, active, unverified, blocked, release status, and next step. Do not report every file or command.
+
+## Execute in dependency waves
+
+1. **Discover:** read instructions, audit the baseline, and name the scope boundary.
+2. **Prepare:** create the branch and controlled temporary locations; do not change behavior early.
+3. **Implement:** make the smallest coherent change inside the allowed write scope.
+4. **Verify:** run narrow checks, then repository-wide checks and original-condition tests.
+5. **Close:** inspect the diff, perform only explicitly authorized external actions after local gates, and report the actual result.
+
+Parallelize only independent checks with disjoint writes or read-only scopes. Subagents are optional optimization, not part of the Skill's definition. Use them only when the work is independent, coordination is worthwhile, and the main thread can summarize and verify the batch. Default to no more than three at once; read [communication-and-progress-contract.md](references/communication-and-progress-contract.md) before using them.
+
+## Authorization and stopping
+
+Continue safe, reversible, in-scope work without another confirmation. Establish a `GATE` and wait only for:
+
+- login, MFA, private credentials, or a security access path the user must provide;
+- external permission denial or formal approval;
+- an unapproved irreversible, production, public, paid, destructive, or high-impact action;
+- a material ambiguity with no safe default;
+- a key fact whose absence makes the next mutation unsafe;
+- a critical result that cannot be verified and has no trustworthy substitute;
+- a legal, compliance, or safety decision that requires a human.
+
+Before a `GATE`, finish all independent safe work and state the smallest user action without requesting a secret. A `CHECKPOINT` never asks for confirmation; a `GATE` explicitly waits.
+
+Use [decision-and-authorization-boundaries.md](references/decision-and-authorization-boundaries.md) for the blocker format.
+
+## Failure, retries, and evidence
+
+Do not stop or repeat blindly when a routine check fails:
+
+1. preserve the command, exit code, and relevant error;
+2. classify content, environment, dependency, permission, or external-state failure;
+3. make one bounded correction;
+4. rerun the smallest decisive check;
+5. continue only when the workpack's done condition is supported.
+
+For long commands, announce the target and success criterion before starting. If there is no natural milestone after roughly 90 seconds, send a concise heartbeat; do not let a normal task go about two minutes without human-readable status. These timing values are this repository's collaboration design, not a platform guarantee.
+
+A changed file is not a test; a passing test is not CI; CI is not a build, preview, upload, release, or user acceptance. Use [verification-and-failure-handling.md](references/verification-and-failure-handling.md) and mark missing proof `unknown`.
+
+## Required final state
+
+Use one of:
+
+- `COMPLETE`: every acceptance criterion has fresh, direct evidence;
+- `PARTIAL`: useful work is verified, but a bounded nonessential or externally unobservable criterion remains open;
+- `BLOCKED`: the next required safe action needs user input or an external state change.
+
+The final report must distinguish local edits, tests, CI, build, preview, upload, merge, release, and user acceptance. Include changed artifacts, intentionally untouched scope, skipped checks, assumptions, risks, blockers, and the one user action if any. Use [workpack-templates.md](references/workpack-templates.md) when a structured report helps.
+
+## Chinese operating example
+
+> 请低交互、高自治地完成这项多阶段改动。
+>
+> **CHECKPOINT（不等待回复）：** 已完成范围确认和基线审计；正在进入实现；静态验证和安装冒烟尚未运行；当前未提交、未推送。下一次在实施完成或进入验证时汇报。我会继续执行。
+>
+> 随后直接完成安全工作。只有登录/MFA、权限拒绝、未授权高影响动作或关键事实缺失才建立 `GATE`。
 
 ## Red flags
 
-Stop and re-evaluate when you notice any of these thoughts or behaviors:
+Stop and re-evaluate if you notice:
 
-- “I should ask for confirmation before every routine step.”
-- “I can stop after the first workpack because the user can continue later.”
-- “This nearby cleanup is probably implied.”
-- “The test is inconvenient, so the diff is enough.”
-- “Repeating the same failing command is progress.”
-- “I can include the real path or identifier because this is only an internal report.”
-- “I will paste the secret so the user can fix it faster.”
-- “A successful edit is the same as a verified result.”
+- a long ordinary task has no human-readable update for about two minutes;
+- a checkpoint ends with “reply to continue” even though no gate exists;
+- a command log or subagent lifecycle is being used as a progress report;
+- a report uses a fake stage denominator or percentage;
+- edited, tested, CI, published, or accepted states are conflated;
+- repeated subagents produce no bounded batch summary;
+- a quiet mode was inferred from “direct execution” or “low interaction”;
+- a diagnosis-only request is being changed, deployed, uploaded, or published;
+- a failure is repeated without a changed diagnosis;
+- user changes, secrets, or private identifiers are exposed.
 
-When a red flag appears, return to the mission contract, workpack status, scope guard, and evidence checklist.
-
-## Chinese examples
-
-### Example: autonomous kickoff
-
-User:
-
-> 请低交互、高自治地完成这项改动：梳理现有流程，补齐缺失实现，运行验证，并给出简洁报告。只改任务范围内的文件，除非遇到真正阻塞不要提问。
-
-Apply the protocol:
-
-- Parse the scope and done conditions.
-- Inspect the repository instructions and current behavior.
-- Create discovery, implementation, regression, and verification workpacks.
-- Run independent discovery or validation work in parallel when writes do not overlap.
-- Ask nothing during routine execution.
-- Report only verified changes, checks, assumptions, and blockers.
-
-### Example: one valid blocker
-
-> 已完成范围确认、现状检查和不依赖外部输入的改动。当前唯一阻塞是缺少任务要求的输入文件；继续执行会迫使我猜测数据格式并可能产生错误结果。请提供脱敏后的样例或明确格式约束。收到后我会继续完成剩余工作包并重新运行验证。
-
-### Example: public-safe report
-
-> 结果：部分完成\n> 已完成：流程梳理、核心改动、目标测试。\n> 验证：目标测试通过；端到端检查因缺少安全测试输入而跳过。\n> 变更：`src/<module>.ts`、`tests/<module>.test.ts`。\n> 阻塞：需要脱敏测试夹具；未复制任何凭据或私密配置。
-
-## Supporting reference`r`n`r`nUse [`references/workpack-templates.md`](references/workpack-templates.md) when you need a compact mission contract, workpack card, execution board, blocker message, or final-report template.`r`n`r`n## Quick checklist
+## Quick checklist
 
 Before execution:
 
-- [ ] Mission, scope, non-goals, and done conditions are explicit.
-- [ ] Required inputs and side-effect budget are known.
-- [ ] Workpacks have non-overlapping scopes and validation checks.
+- [ ] Mission, scope, non-goals, side-effect budget, and done conditions are explicit.
+- [ ] Observable mode is selected unless quiet is explicitly requested.
+- [ ] Kickoff checkpoint is ready; it will not ask for confirmation.
+- [ ] Workpacks have disjoint scopes, dependencies, and checks.
 
 During execution:
 
-- [ ] Routine work proceeds without confirmation requests.
-- [ ] Each workpack records evidence and status.
-- [ ] Independent work is parallelized only when safe.
-- [ ] Failures are diagnosed, bounded, and not hidden.
-- [ ] No out-of-scope edits or secret exposure occurs.
+- [ ] Stage transitions and meaningful failures are reported with new information.
+- [ ] Long commands have a preflight note and a bounded heartbeat when needed.
+- [ ] Routine work continues after checkpoints.
+- [ ] Subagents, if any, have independent roles, bounded count, and a main-thread summary.
+- [ ] No out-of-scope edits, secret exposure, or silent authorization expansion occurs.
 
 Before reporting:
 
-- [ ] The diff contains only intended artifacts.
-- [ ] Verification results are accurate and reproducible.
-- [ ] Paths and identifiers are public-safe.
-- [ ] Partial work, skipped checks, assumptions, and blockers are explicit.
+- [ ] Edited, tested, built, previewed, uploaded, merged, released, and accepted states are separate.
+- [ ] Every claimed check has fresh evidence; unknowns remain visible.
+- [ ] The final report is public-safe, concise, and accurate.

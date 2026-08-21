@@ -1,59 +1,31 @@
 ---
 name: trace-feature-chain
-description: Traces a feature from a real user scenario to its release artifact, identifies the first broken link, and defines the smallest safe repair and proof. Use when a role, device, entry point, data shape, permission, runtime, build, preview, upload, or release result does not match expectations.
+description: Trace a cross-layer feature failure from the real user scenario to the released artifact, find the first mismatch, and define the smallest safe repair. Use when a role, device, entry point, data shape, permission, API, shared contract, runtime, build, preview, upload, or re-entry result disagrees with expectation; do not load for ordinary UI polish, isolated syntax fixes, or general cleanup.
 ---
 
 # Trace Feature Chain
 
-## Purpose
+Find the first place where the observed feature stops matching its intended contract. Preserve the original scenario, separate evidence by layer, and repair only the mismatched layer.
 
-Find where reality first diverges from the intended feature contract. Diagnose the cause before editing, keep the change within the requested scope, and prove each claimed layer separately.
+## Trigger boundary
 
-## Trigger conditions
+Load this Skill when a feature is conditional on a role, device, entry point, permission, data shape, runtime, build, delivery channel, or re-entry path. It is also appropriate when a user wants root-cause tracing, a minimum safe fix, or an honest boundary between source, artifact, preview, upload, release, and acceptance.
 
-Use this skill when:
-
-- A feature works for one role, device, entry point, or data state but fails for another.
-- A page error hides whether the fault is in state, identity, permission, API, data, a shared contract, runtime, build, or release.
-- Source code changed but the user may still be running an old preview or uploaded artifact.
-- The user asks for root-cause tracing, a minimal safe fix, or an honest release boundary.
-
-Do not turn a focused diagnosis into general cleanup or an unrelated deployment.
-
-## Chain to trace
-
-Trace this chain in order, skipping a link only when evidence proves it is irrelevant:
-
-```text
-role/account class → business goal → real entry → page state
-→ identity/permission/visibility → user command → API
-→ backend/database/object storage → shared contract → runtime
-→ build artifact → preview/upload/release → re-entry/retry/recovery
-```
+Do not load it for a standalone rewrite, visual polish, one-line syntax correction, or a generic deployment task whose failure chain is not in question.
 
 ## Operating procedure
 
-1. **Freeze the scenario predicate.** Record the role or account class, device/runtime, environment, exact entry and action, data/permission/network conditions, unique failure, expected result, and non-goals. Use classes and placeholders; never expose private identifiers.
-2. **Reproduce the original path.** Keep the original role, device, entry point, data shape, and failure condition. Do not substitute an easier account, simulator, empty record, or alternate route and call the issue fixed.
-3. **Build an evidence matrix.** For every relevant link, record `expected`, `observed`, `evidence`, and `status` (`pass`, `fail`, or `unknown`). See [references/evidence-matrix.md](references/evidence-matrix.md).
-4. **Trace upstream from the symptom.** Verify prerequisites one link at a time. Stop at the first observed mismatch; treat later error text, loading states, and retries as consequences until proven otherwise.
-5. **Separate facts that are often conflated.** Distinguish identity, permission, visibility, applicability, and authorization. Distinguish frontend, backend, database, object storage, runtime, build, preview, upload, release, and user acceptance.
-6. **Probe meaningful boundaries.** Compare only dimensions relevant to the predicate: empty versus non-empty data, ordinary versus special role, simulator versus real device, fresh entry versus re-entry, and online versus degraded network. Check shared contracts when several roles or data shapes can reach the same code.
-7. **Choose the smallest safe repair.** Patch the first mismatched layer. Fix shared behavior in the shared layer; never add an account-ID exception for a shared defect. Avoid unrelated refactors, speculative fallbacks, destructive operations, or redeploying an unaffected layer.
-8. **Verify in layers.** Run the narrowest useful checks, then re-test the original scenario with the original conditions. Verify generated dependencies/artifacts, preview or upload operations, re-entry, retry, and recovery separately when they are in scope.
-9. **Report the boundary honestly.** State what the evidence proves, what it does not prove, what changed, what stayed untouched, and what still requires user or real-device confirmation. Mark missing proof as `unknown`, never as `pass`.
-
-## Guardrails
-
-- Diagnose before editing. Edit only when the user authorizes implementation.
-- Return to the original feature path immediately when investigation drifts to an unrelated symptom.
-- Do not infer end-to-end success from a reachable page, a successful API response, a passing test, a changed file, a successful build, or a successful preview alone.
-- Do not claim that a fix is released until the relevant artifact and release evidence are confirmed.
-- Redact secrets, tokens, personal data, private paths, real domains, account identifiers, and commit hashes from public-facing reports and examples.
+1. **Freeze the scenario predicate.** Record the generic role/account class, business goal, device/runtime, environment, real entry, page state, identity and permission facts, data conditions, exact action, unique failure, expected result, and non-goals. Use placeholders for private identifiers.
+2. **Reproduce the real path.** Keep the original role class, device, entry point, data shape, and failure condition. Do not substitute an easier account, empty data, simulator, or alternate route and call the issue fixed.
+3. **Walk the chain in order.** Check role → business goal → real entry → page state → permission and identity facts → command → API → backend/database/object storage → shared contract → runtime → build artifact → preview/upload/release → re-entry and recovery.
+4. **Record evidence by link.** For each relevant link, write `expected`, `observed`, `evidence`, and `pass | fail | unknown`. Use [the evidence matrix](references/evidence-matrix.md) and read [the scenario model](references/scenario-and-chain-model.md) when the predicate is complex.
+5. **Find the first mismatch.** Trace upstream from the symptom and stop at the first directly evidenced difference. Treat later error text, loading state, retry loop, and stale page as consequences until proven otherwise.
+6. **Probe only meaningful contrasts.** Compare empty versus non-empty data, ordinary versus special role, simulator versus real device, fresh entry versus re-entry, and source versus delivered artifact only when they relate to the original predicate.
+7. **Choose the narrow repair.** Fix the first mismatched layer. Repair shared behavior in the shared contract, policy in the policy layer, and data production in the producing layer. Do not add account-specific exceptions, speculative fallbacks, unrelated refactors, or an unaffected server deployment.
+8. **Verify each claimed layer.** Run focused tests, the original scenario, relevant generation/build checks, and delivery or re-entry checks separately. Read [proof and release boundaries](references/proof-and-release-boundaries.md) before claiming that a fix reached a user.
+9. **Report what is still unknown.** State changed files, intentionally untouched layers, evidence, missing proof, user or real-device checks, and retry/recovery behavior. Never turn an unrun check into `pass`.
 
 ## Required output
-
-Use this compact structure:
 
 ```text
 Scenario predicate:
@@ -67,6 +39,12 @@ Release boundary:
 Remaining risks or user checks:
 ```
 
-Chinese example:
+## Public-safe case
 
-> 平台运营角色在真机上从主界面进入公开资料页并点击编辑；仅在头像或背景图非空时失败，模拟器正常。请找第一处逻辑不匹配，不要只改错误文案，也不要顺手部署无关服务。
+A role-specific real-device failure conditioned on a non-empty signed media URL can look like an API problem. If the API returns the expected shape and a shared client contract calls a browser-only runtime API, the first mismatch is the contract/runtime boundary. Fix the shared code, add the original data shape as a regression case, and do not redeploy an unrelated backend. See [the anonymized case](references/anonymized-case-study.md); its numbers are a single case record, not a benchmark.
+
+## Composition
+
+- Pair with `run-autonomous-workpacks` when an already-authorized repair spans diagnosis, implementation, tests, artifacts, and closeout.
+- Pair with `reason-from-reality` when the software evidence must change a longer decision or learning loop.
+- Do not load all three for a simple syntax fix, translation, visual polish, or isolated factual answer.
