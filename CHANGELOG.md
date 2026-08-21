@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.1] - 2026-08-21
+
+### Fixed
+
+- Expanded trigger fixtures so both positive and near-neighbor negative cases include English and Chinese prompts.
+
 ## [0.1.0] - 2026-08-21
 
 ### Added

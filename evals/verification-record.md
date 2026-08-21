@@ -8,7 +8,7 @@ Date: 2026-08-21 (Asia/Shanghai)
 - `quick_validate.py` for all three Skills: PASS (3/3).
 - Repository validator: PASS.
 - Validator unit tests: PASS (2/2).
-- Trigger fixtures: PASS (3 files; each has 20 unique cases, 10 positive and 10 negative).
+- Trigger fixtures: PASS (3 files; each has 20 unique cases, 10 positive and 10 negative; both classes include English and Chinese prompts).
 - Public-safe scan: PASS for 31 UTF-8 repository files inspected.
 
 ## Harness checks

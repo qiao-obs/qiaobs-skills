@@ -1,25 +1,105 @@
 {
   "skill_name": "run-autonomous-workpacks",
   "cases": [
-    {"id":"raw-01","prompt":"尽量一次做完这个跨文件修复：检查、实现、测试、文档、Git 收尾都由你连续推进；遇到必须我做的登录或 MFA 才停。","should_trigger":true},
-    {"id":"raw-02","prompt":"Continue executing the authorized implementation. Reduce handoffs, preserve existing edits, and report only real blockers.","should_trigger":true},
-    {"id":"raw-03","prompt":"Turn this multi-stage migration into one self-contained work package with user-only blockers and retry rules.","should_trigger":true},
-    {"id":"raw-04","prompt":"请先一次性检查历史、分支、工作区、权限和外部依赖，然后在授权范围内持续完成剩余工作。","should_trigger":true},
-    {"id":"raw-05","prompt":"The task includes code changes, deterministic tests, docs, evidence, and a clean handoff. Execute it as one bounded workpack.","should_trigger":true},
-    {"id":"raw-06","prompt":"不要每一步都问我确认；把可执行事项连续完成，只在外部平台审批时暂停并给出唯一操作。","should_trigger":true},
-    {"id":"raw-07","prompt":"Organize this into inspect → implement → verify → document → close, with checkpoints and no destructive commands.","should_trigger":true},
-    {"id":"raw-08","prompt":"A second agent must be able to continue this work from a self-contained handoff. Generate and execute the safe parts now.","should_trigger":true},
-    {"id":"raw-09","prompt":"Run the whole authorized local release-preparation package, but do not publish or deploy without explicit permission.","should_trigger":true},
-    {"id":"raw-10","prompt":"When a test fails, diagnose and retry within scope instead of stopping after the first error; distinguish partial from complete.","should_trigger":true},
-    {"id":"raw-11","prompt":"Explain what this function does without changing files.","should_trigger":false},
-    {"id":"raw-12","prompt":"Review this plan and list risks only.","should_trigger":false},
-    {"id":"raw-13","prompt":"What is the best color for a dashboard?","should_trigger":false},
-    {"id":"raw-14","prompt":"Give me three names for a study app.","should_trigger":false},
-    {"id":"raw-15","prompt":"Diagnose the bug but do not implement anything.","should_trigger":false},
-    {"id":"raw-16","prompt":"Write a one-line shell command to list files.","should_trigger":false},
-    {"id":"raw-17","prompt":"Translate this paragraph into Chinese.","should_trigger":false},
-    {"id":"raw-18","prompt":"Summarize the attached meeting notes.","should_trigger":false},
-    {"id":"raw-19","prompt":"Tell me whether this API name is idiomatic.","should_trigger":false},
-    {"id":"raw-20","prompt":"Draft a short commit message for this change.","should_trigger":false}
+    {
+      "id": "raw-01",
+      "prompt": "尽量一次做完这个跨文件修复：检查、实现、测试、文档、Git 收尾都由你连续推进；遇到必须我做的登录或 MFA 才停。",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-02",
+      "prompt": "Continue executing the authorized implementation. Reduce handoffs, preserve existing edits, and report only real blockers.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-03",
+      "prompt": "Turn this multi-stage migration into one self-contained work package with user-only blockers and retry rules.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-04",
+      "prompt": "请先一次性检查历史、分支、工作区、权限和外部依赖，然后在授权范围内持续完成剩余工作。",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-05",
+      "prompt": "The task includes code changes, deterministic tests, docs, evidence, and a clean handoff. Execute it as one bounded workpack.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-06",
+      "prompt": "不要每一步都问我确认；把可执行事项连续完成，只在外部平台审批时暂停并给出唯一操作。",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-07",
+      "prompt": "Organize this into inspect → implement → verify → document → close, with checkpoints and no destructive commands.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-08",
+      "prompt": "A second agent must be able to continue this work from a self-contained handoff. Generate and execute the safe parts now.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-09",
+      "prompt": "Run the whole authorized local release-preparation package, but do not publish or deploy without explicit permission.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-10",
+      "prompt": "When a test fails, diagnose and retry within scope instead of stopping after the first error; distinguish partial from complete.",
+      "should_trigger": true
+    },
+    {
+      "id": "raw-11",
+      "prompt": "请只解释这个函数做什么，不要修改文件。",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-12",
+      "prompt": "请只审查这份计划并列出风险。",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-13",
+      "prompt": "请把这段话翻译成中文。",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-14",
+      "prompt": "Give me three names for a study app.",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-15",
+      "prompt": "Diagnose the bug but do not implement anything.",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-16",
+      "prompt": "Write a one-line shell command to list files.",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-17",
+      "prompt": "Translate this paragraph into Chinese.",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-18",
+      "prompt": "Summarize the attached meeting notes.",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-19",
+      "prompt": "Tell me whether this API name is idiomatic.",
+      "should_trigger": false
+    },
+    {
+      "id": "raw-20",
+      "prompt": "Draft a short commit message for this change.",
+      "should_trigger": false
+    }
   ]
 }

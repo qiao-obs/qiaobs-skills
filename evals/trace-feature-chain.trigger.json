@@ -1,25 +1,105 @@
 {
   "skill_name": "trace-feature-chain",
   "cases": [
-    {"id":"tfc-01","prompt":"The operator account can edit a profile in the simulator but the real phone fails only when a signed avatar URL exists. Trace the first mismatch before changing code.","should_trigger":true},
-    {"id":"tfc-02","prompt":"请沿角色、入口、页面状态、权限、API、数据库、共享契约、真机、构建和再次进入审查这个功能。","should_trigger":true},
-    {"id":"tfc-03","prompt":"The API returns 200, but only one role sees a blank editor after reopening the mini-program. Find the first broken link and define evidence.","should_trigger":true},
-    {"id":"tfc-04","prompt":"A feature works with empty data but fails with non-empty media metadata on a device runtime. Diagnose without adding an account special case.","should_trigger":true},
-    {"id":"tfc-05","prompt":"代码已经改了，但用户使用的预览包没有变化。请审查构建、预览、上传和再次进入后的结果投影。","should_trigger":true},
-    {"id":"tfc-06","prompt":"Audit this permission issue from the real user entry through backend facts, shared contract, runtime, release, and retry behavior.","should_trigger":true},
-    {"id":"tfc-07","prompt":"The same button behaves differently for a member and an operator; compare the two paths and identify the earliest divergence.","should_trigger":true},
-    {"id":"tfc-08","prompt":"请只修复一个真机失败问题，保留其他修改，不要重新部署无关的服务器功能，并给出闭环证据。","should_trigger":true},
-    {"id":"tfc-09","prompt":"A page shows a generic retry toast after a failed request. Determine whether the issue is permissions, data, runtime parsing, or release packaging.","should_trigger":true},
-    {"id":"tfc-10","prompt":"Build a scenario matrix across role, client, API, persisted facts, permission, runtime, build, release, and re-entry for this bug.","should_trigger":true},
-    {"id":"tfc-11","prompt":"Fix this TypeScript typo in one function and run the unit test.","should_trigger":false},
-    {"id":"tfc-12","prompt":"Rewrite this error message to sound friendlier.","should_trigger":false},
-    {"id":"tfc-13","prompt":"The server returns 500 in every environment; just explain the stack trace.","should_trigger":false},
-    {"id":"tfc-14","prompt":"Add a unit test for a pure date formatter with a clear expected output.","should_trigger":false},
-    {"id":"tfc-15","prompt":"Make the README typography more elegant without changing behavior.","should_trigger":false},
-    {"id":"tfc-16","prompt":"What does HTTP 401 mean? Give a one-sentence answer.","should_trigger":false},
-    {"id":"tfc-17","prompt":"Rename this variable across one file and update imports.","should_trigger":false},
-    {"id":"tfc-18","prompt":"Create a simple button component with a loading spinner.","should_trigger":false},
-    {"id":"tfc-19","prompt":"Format this JSON file and remove trailing whitespace.","should_trigger":false},
-    {"id":"tfc-20","prompt":"Write a short product tagline for a campus app.","should_trigger":false}
+    {
+      "id": "tfc-01",
+      "prompt": "The operator account can edit a profile in the simulator but the real phone fails only when a signed avatar URL exists. Trace the first mismatch before changing code.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-02",
+      "prompt": "请沿角色、入口、页面状态、权限、API、数据库、共享契约、真机、构建和再次进入审查这个功能。",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-03",
+      "prompt": "The API returns 200, but only one role sees a blank editor after reopening the mini-program. Find the first broken link and define evidence.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-04",
+      "prompt": "A feature works with empty data but fails with non-empty media metadata on a device runtime. Diagnose without adding an account special case.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-05",
+      "prompt": "代码已经改了，但用户使用的预览包没有变化。请审查构建、预览、上传和再次进入后的结果投影。",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-06",
+      "prompt": "Audit this permission issue from the real user entry through backend facts, shared contract, runtime, release, and retry behavior.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-07",
+      "prompt": "The same button behaves differently for a member and an operator; compare the two paths and identify the earliest divergence.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-08",
+      "prompt": "请只修复一个真机失败问题，保留其他修改，不要重新部署无关的服务器功能，并给出闭环证据。",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-09",
+      "prompt": "A page shows a generic retry toast after a failed request. Determine whether the issue is permissions, data, runtime parsing, or release packaging.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-10",
+      "prompt": "Build a scenario matrix across role, client, API, persisted facts, permission, runtime, build, release, and re-entry for this bug.",
+      "should_trigger": true
+    },
+    {
+      "id": "tfc-11",
+      "prompt": "请修复这个 TypeScript 拼写错误并运行单元测试。",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-12",
+      "prompt": "请把错误提示改得更友好。",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-13",
+      "prompt": "请给校园应用写一句产品标语。",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-14",
+      "prompt": "Add a unit test for a pure date formatter with a clear expected output.",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-15",
+      "prompt": "Make the README typography more elegant without changing behavior.",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-16",
+      "prompt": "What does HTTP 401 mean? Give a one-sentence answer.",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-17",
+      "prompt": "Rename this variable across one file and update imports.",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-18",
+      "prompt": "Create a simple button component with a loading spinner.",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-19",
+      "prompt": "Format this JSON file and remove trailing whitespace.",
+      "should_trigger": false
+    },
+    {
+      "id": "tfc-20",
+      "prompt": "Write a short product tagline for a campus app.",
+      "should_trigger": false
+    }
   ]
 }
