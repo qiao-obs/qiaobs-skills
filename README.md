@@ -219,4 +219,4 @@ Codex 是主要目标。其他遵循开放 Agent Skills 约定的客户端为尽
 
 ## 版本
 
-当前稳定版本为 [`v0.2.0`](https://github.com/qiao-obs/qiaobs-skills/releases/tag/v0.2.0)。
+当前稳定版本为 [`v0.2.1`](https://github.com/qiao-obs/qiaobs-skills/releases/tag/v0.2.1)。
