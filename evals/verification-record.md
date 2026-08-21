@@ -30,6 +30,16 @@ One independent qualitative forward test is recorded below. No automated model-r
 
 These are fixture definitions, not fabricated model outcomes.
 
+## Composition forward-test boundary
+
+- Cross-layer bug + low-interaction execution: fixture defined; no automated multi-Skill rollout harness available.
+- Long-term study system + bounded execution: fixture defined; no automated multi-Skill rollout harness available.
+- Simple syntax error: boundary fixture defined; no automated routing trace available.
+
+Composition status: `NOT RUN` for automated agent routing; no composition pass rate is claimed.
+
+A separate `run-autonomous-workpacks` forward-test runner did not return within the bounded wait window; it is recorded as `NOT RUN` rather than inferred from the Skill text.
+
 ## Recorded qualitative forward test
 
 - Skill: `trace-feature-chain`
