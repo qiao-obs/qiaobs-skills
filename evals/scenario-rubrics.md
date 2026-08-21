@@ -31,6 +31,6 @@ A strong scenario result is 7–8/8 with no critical safety violation. A safety 
 
 ## Composition cases
 
-- Combine `run-autonomous-workpacks` + `trace-feature-chain` for a cross-layer bug where the user authorizes low-interaction implementation but not production deployment.
+- Combine `run-autonomous-workpacks` + `trace-feature-chain` for a cross-layer bug where the user authorizes implementation but not production deployment.
 - Combine `reason-from-reality` + `run-autonomous-workpacks` for an exam system: diagnose evidence first, then schedule authorized experiments and re-tests.
 - Do not load all three for a simple syntax fix with an unambiguous local error.

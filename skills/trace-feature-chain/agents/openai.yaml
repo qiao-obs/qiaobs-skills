@@ -1,3 +1,6 @@
 interface:
   display_name: "Trace Feature Chain"
-  short_description: "Find the first mismatch from scenario to release"
+  short_description: "Find the first mismatch from scenario to release."
+  default_prompt: "Trace the real feature scenario to its release artifact, find the first mismatch, make the smallest safe repair, and report which verification layers remain unknown."
+  icon_small: "./assets/icon-small.png"
+  icon_large: "./assets/icon-large.png"

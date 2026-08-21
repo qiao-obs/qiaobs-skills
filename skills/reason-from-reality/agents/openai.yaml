@@ -1,3 +1,6 @@
 interface:
   display_name: "Reason From Reality"
-  short_description: "Build evidence-grounded learning loops"
+  short_description: "Turn evidence into measurable action and belief updates."
+  default_prompt: "Turn this learning or decision goal into a reality-tested loop with facts, judgments, actions, validation, unknowns, a re-test date, and explicit update rules."
+  icon_small: "./assets/icon-small.png"
+  icon_large: "./assets/icon-large.png"

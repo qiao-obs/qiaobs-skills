@@ -1,18 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="440" viewBox="0 0 1600 440" role="img" aria-labelledby="title desc">
-  <title id="title">qiaobs-skills</title>
-  <desc id="desc">A quiet blue-gray field with three linked nodes representing trace, execute, and learn.</desc>
-  <rect width="1600" height="440" fill="#eef3f8"/>
-  <rect x="56" y="56" width="1488" height="328" rx="28" fill="#f8fafc" stroke="#c7d3df" stroke-width="2"/>
-  <path d="M210 220H1390" stroke="#91a8bc" stroke-width="3" stroke-dasharray="10 16"/>
-  <g fill="#40566b">
-    <circle cx="390" cy="220" r="54"/><circle cx="800" cy="220" r="54"/><circle cx="1210" cy="220" r="54"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 0 1600 720" role="img" aria-labelledby="title desc">
+  <title id="title">qiaobs-skills capability map</title>
+  <desc id="desc">Three focused, evidence-first capability cards: trace, execute, and update.</desc>
+  <rect width="1600" height="720" fill="#F6F8FC"/>
+  <g stroke="#E9EEF5" stroke-width="1">
+    <path d="M56 30V690M136 30V690M216 30V690M296 30V690M376 30V690M456 30V690M536 30V690M616 30V690M696 30V690M776 30V690M856 30V690M936 30V690M1016 30V690M1096 30V690M1176 30V690M1256 30V690M1336 30V690M1416 30V690M1496 30V690"/>
+    <path d="M30 40H1570M30 120H1570M30 200H1570M30 280H1570M30 360H1570M30 440H1570M30 520H1570M30 600H1570M30 680H1570"/>
   </g>
-  <g fill="#f8fafc" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" text-anchor="middle">
-    <text x="390" y="214" font-size="22" font-weight="700">TRACE</text><text x="390" y="244" font-size="15">first mismatch</text>
-    <text x="800" y="214" font-size="22" font-weight="700">EXECUTE</text><text x="800" y="244" font-size="15">safe continuity</text>
-    <text x="1210" y="214" font-size="22" font-weight="700">LEARN</text><text x="1210" y="244" font-size="15">evidence loops</text>
+  <g font-family="Segoe UI, Arial, sans-serif" fill="#0B1220">
+    <text x="78" y="125" font-size="54" font-weight="700">qiaobs-skills</text>
+    <text x="82" y="170" font-size="22" font-weight="700" fill="#2563EB">TRACE / EXECUTE / UPDATE</text>
+    <text x="82" y="222" font-size="29" fill="#334155">Reality-tested skills for work that must survive</text>
+    <text x="82" y="260" font-size="29" fill="#334155">the path from intention to evidence.</text>
   </g>
-  <text x="112" y="132" fill="#243447" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="46" font-weight="700">qiaobs-skills</text>
-  <text x="114" y="318" fill="#526581" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22">reality-tested skills for agents that need to finish the chain</text>
-  <text x="1390" y="132" fill="#7a8fa3" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" text-anchor="end" letter-spacing="2">OPEN / COMPOSABLE / EVIDENCE-FIRST</text>
+  <g stroke="#D8E1EC" stroke-width="2">
+    <rect x="80" y="360" width="400" height="260" rx="22" fill="#FFFFFF"/>
+    <rect x="560" y="360" width="400" height="260" rx="22" fill="#FFFFFF"/>
+    <rect x="1040" y="360" width="400" height="260" rx="22" fill="#FFFFFF"/>
+  </g>
+  <g>
+    <rect x="80" y="360" width="400" height="8" fill="#2563EB"/><rect x="560" y="360" width="400" height="8" fill="#7C3AED"/><rect x="1040" y="360" width="400" height="8" fill="#0F766E"/>
+    <g stroke="#2563EB" stroke-width="4" fill="#FFFFFF"><path d="M125 418L167 396L209 426"/><circle cx="125" cy="418" r="8"/><circle cx="167" cy="396" r="8"/><circle cx="209" cy="426" r="8"/></g>
+    <g stroke="#7C3AED" stroke-width="3" fill="none"><rect x="605" y="420" width="84" height="15" rx="4"/><rect x="605" y="442" width="66" height="15" rx="4"/><rect x="605" y="464" width="48" height="15" rx="4"/><path d="M700 435l16 15 28-35" stroke-width="4"/></g>
+    <g stroke="#0F766E" stroke-width="4" fill="none"><circle cx="1134" cy="466" r="48"/><path d="M1107 494l-9-23 24 7M1161 438l9 23-24-7" fill="#0F766E"/><circle cx="1134" cy="466" r="9" fill="#0F766E"/></g>
+  </g>
+  <g font-family="Segoe UI, Arial, sans-serif" fill="#0B1220">
+    <text x="125" y="545" font-size="27" font-weight="700">TRACE</text><text x="125" y="586" font-size="20" fill="#334155">Find the first mismatch</text>
+    <text x="605" y="545" font-size="27" font-weight="700">EXECUTE</text><text x="605" y="586" font-size="20" fill="#334155">Complete bounded work</text>
+    <text x="1085" y="545" font-size="27" font-weight="700">UPDATE</text><text x="1085" y="586" font-size="20" fill="#334155">Let evidence revise the plan</text>
+    <text x="80" y="670" font-size="18" fill="#94A3B8">Three focused capabilities. Composable by need, never by habit.</text>
+  </g>
 </svg>

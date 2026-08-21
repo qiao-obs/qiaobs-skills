@@ -1,0 +1,23 @@
+{
+  "purpose": "composition-boundary-fixtures",
+  "cases": [
+    {
+      "id": "composition-01",
+      "prompt": "A cross-layer publishing bug fails only on a real device with non-empty media. The root cause is not known. Trace the first mismatch, then execute the authorized repair, tests, build, and evidence closeout with fewer handoffs.",
+      "should_load": ["trace-feature-chain", "run-autonomous-workpacks"],
+      "should_not_load": ["reason-from-reality"]
+    },
+    {
+      "id": "composition-02",
+      "prompt": "Build and run a long-term study system from actual practice records. Diagnose the bottleneck, design retrieval and transfer experiments, schedule delayed re-tests, and carry out the authorized work packages.",
+      "should_load": ["reason-from-reality", "run-autonomous-workpacks"],
+      "should_not_load": ["trace-feature-chain"]
+    },
+    {
+      "id": "composition-03",
+      "prompt": "Fix this one-line syntax error and run its unit test. Do not load a broad debugging chain, autonomous workpack protocol, or long-term reasoning loop.",
+      "should_load": [],
+      "should_not_load": ["trace-feature-chain", "run-autonomous-workpacks", "reason-from-reality"]
+    }
+  ]
+}

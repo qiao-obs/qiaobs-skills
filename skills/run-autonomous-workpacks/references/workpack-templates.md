@@ -1,19 +1,19 @@
-# Workpack Templates
+# Workpack records
 
-Use these templates to keep autonomous execution bounded, inspectable, and low-interaction. Replace template fields; do not insert real secrets or private identifiers.
+These are optional structured records for the work itself. They are not a required conversation format.
 
 ## Mission contract
 
 ```text
 Objective: <observable outcome>
-Scope: <allowed files, systems, or artifacts>
+Scope: <allowed files, systems, and artifacts>
 Non-goals: <explicit exclusions>
 Acceptance criteria:
 - <criterion>
 - <criterion>
-Constraints: <technical, privacy, compatibility, and interaction constraints>
+Constraints: <technical, privacy, compatibility, and authorization constraints>
 Inputs: <authoritative sources>
-Side-effect budget: <allowed | confirmation required | forbidden>
+Side-effect budget: <allowed | evidence-dependent | forbidden>
 Stop conditions: <done, blocked, or escalation conditions>
 ```
 
@@ -21,61 +21,71 @@ Stop conditions: <done, blocked, or escalation conditions>
 
 ```text
 ID: WP-<number>
-Name: <imperative name>
-Objective: <one independently verifiable outcome>
-Inputs: <files, outputs, or decisions required>
-Allowed writes: <non-overlapping scope>
-Dependencies: <workpack IDs or none>
-Risk: low | medium | high
-Done when:
-- <observable condition>
-Checks:
-- <command, test, inspection, or preview>
-Rollback or recovery: <safe recovery note>
-Status: queued | active | blocked | verified | failed | skipped
-Evidence: <short result after execution>
+Name: <imperative outcome>
+Objective: <one independently verifiable result>
+Allowed writes: <exact paths>
+Untouched scope: <paths that must remain unchanged>
+Inputs: <files, records, or prior outputs>
+Dependencies: <prior IDs or none>
+Risk: <low | medium | high>
+Done when: <observable condition>
+Checks: <commands, tests, preview, or inspection>
+Recovery: <safe retry or route change>
+Status: <queued | active | blocked | verified | failed | skipped>
+Evidence: <result and artifact>
 ```
 
-## Execution board
-
-| ID | Workpack | Depends on | Write scope | Status | Evidence |
-|---|---|---|---|---|---|
-| WP-01 | <name> | — | <scope> | queued | — |
-| WP-02 | <name> | WP-01 | <scope> | queued | — |
-
-Use one row per workpack. Do not mark `verified` until the listed check has run and supports the done condition.
-
-## Blocker message
+## Dependency board
 
 ```text
-Blocked: <specific next action>
-Completed: <work already finished>
-Reason: <evidence-based safety, access, or ambiguity reason>
-Needed: <smallest safe input or decision>
-After unblock: <next workpack and verification>
+WP-01 <status> -> WP-02 <status> -> WP-03 <status>
+Blocked by: <specific dependency or none>
+Ready next: <workpack ID or none>
+Untouched scope: <paths>
 ```
 
-## Final report
+## Verification record
 
 ```text
-Outcome: complete | partial | blocked
-Completed workpacks:
-- <ID>: <verified result>
-Changed artifacts:
-- <project-relative-path>: <purpose>
-Verification:
-- <check>: passed | failed | skipped — <evidence>
-Assumptions:
-- <material assumption, or none>
-Open blockers or follow-ups:
-- <item, or none>
+Workpack: <ID>
+Claim: <what is being proven>
+Evidence: <command, test, artifact, or external record>
+Observed: <actual result>
+Status: <verified | unknown | failed | skipped>
+Does not prove: <next layer that remains open>
 ```
 
-## Chinese micro-example
+## Failure and retry record
 
 ```text
-WP-02 名称：补齐登录态校验
-完成条件：未登录请求得到明确错误；已登录请求保持原行为
-验证：运行目标测试，并检查一条未登录和一条已登录路径
-写入范围：src/<module>.ts、tests/<module>.test.ts
+Workpack: <ID>
+Command: <exact command>
+Exit code: <number>
+First relevant error: <short factual excerpt>
+Cause class: <content | environment | dependency | permission | external state>
+Bounded correction: <one diagnosed change>
+Decisive rerun: <command and result>
+Final status: <verified | partial | blocked | failed>
+```
+
+## Blocker fact record
+
+```text
+Blocker: <specific missing input, permission, or external state>
+Evidence: <proof>
+Risk: <why guessing is unsafe>
+Required input: <smallest non-secret action or fact>
+Resume condition: <observable condition>
+```
+
+## Closeout record
+
+```text
+Outcome: <COMPLETE | PARTIAL | BLOCKED>
+Completed workpacks: <IDs and evidence>
+Changed artifacts: <paths and purpose>
+Untouched scope: <paths>
+Verification: <pass, unknown, skipped, or failed by layer>
+External actions: <performed, skipped, or blocked with evidence>
+Open blockers or follow-ups: <items or none>
 ```

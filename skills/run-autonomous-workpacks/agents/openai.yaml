@@ -1,3 +1,6 @@
 interface:
-  display_name: "Run Autonomous Workpacks"
-  short_description: "Execute run-autonomous-workpacks with low interaction and verified results"
+  display_name: "Autonomous Workpacks"
+  short_description: "Complete bounded, verifiable multi-step work"
+  default_prompt: "Use @run-autonomous-workpacks to organize and complete this authorized multi-step task as bounded, verifiable workpacks while preserving scope, safety boundaries, user changes, and evidence."
+  icon_small: "./assets/icon-small.png"
+  icon_large: "./assets/icon-large.png"
